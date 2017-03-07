@@ -171,6 +171,8 @@ public class CharacterMovement : MonoBehaviour {
                 velocity.x = 0f;
                 translation.x = (hit.distance - SKIN_WIDTH) * directionX;
                 rayLength = hit.distance;
+
+                //hit.collider.gameObject.GetComponent<SceneElement>().TurnIntoGold();
             }
 
             Debug.DrawRay(rayOrigin, rayDirection, Color.red);
@@ -178,6 +180,7 @@ public class CharacterMovement : MonoBehaviour {
     }
     void VerticalCollisions()
     {
+        GameObject objectToOrificate = null;
         bool someoneHit = false;
         float directionY = Mathf.Sign(velocity.y);
         float directionX = Mathf.Sign(velocity.x);
@@ -191,6 +194,7 @@ public class CharacterMovement : MonoBehaviour {
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, rayLength, LayerMask.GetMask("Platform"));
             if (hit)
             {
+                objectToOrificate = hit.collider.gameObject;
                 translation.y = (hit.distance - SKIN_WIDTH) * directionY;
                 rayLength = hit.distance;
                 //if (directionY == -1)
@@ -216,6 +220,9 @@ public class CharacterMovement : MonoBehaviour {
 
             Debug.DrawRay(rayOrigin, rayDirection, Color.red);
         }
+
+        if (grounded && objectToOrificate!=null)
+            objectToOrificate.GetComponent<SceneElement>().TurnIntoGold();
     }
 
     void ClimbSlope()

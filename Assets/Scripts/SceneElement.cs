@@ -9,10 +9,12 @@ public class SceneElement : MonoBehaviour {
     SpriteRenderer goldRenderer;
     Vector2 pos;
 
+    //Dissolve
     float threshold;
-    const float FREQUENCY = 0.05f;
-    const float STEP = 0.025f;
-    
+    [SerializeField]
+    float FREQUENCY = 0.05f;
+    [SerializeField]
+    float STEP = 0.025f;
 
     public bool Orificated = false;
 
@@ -20,30 +22,29 @@ public class SceneElement : MonoBehaviour {
 	void Start () {
 
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteMaterial = spriteRenderer.material;
+        spriteMaterial = spriteRenderer.materials[0];
         pos = transform.position;	
 	}
-	
-	// Update is called once per frame
-	void Update () {
 
-        // This should be substituted by a collision check
-        if (Input.GetKeyDown(KeyCode.A) && !Orificated)
+    public void TurnIntoGold()
+    {
+        if (!Orificated)
         {
             Orificated = true;
+            gameObject.tag = "Orificated";
             StartCoroutine("Orificate");
-        }	
-	}
+        }
+    }
 
     // Coroutine which turns gradually into gold
     IEnumerator Orificate()
     {
-        threshold = spriteMaterial.GetFloat("_Threshold");
+        threshold = spriteRenderer.material.GetFloat("_Threshold");
         while (threshold < 1)
-        {
+        {   
+            spriteRenderer.material.SetFloat("_Threshold", threshold + STEP);
+            threshold = spriteRenderer.material.GetFloat("_Threshold");
             yield return new WaitForSecondsRealtime(FREQUENCY);
-            spriteMaterial.SetFloat("_Threshold", threshold + STEP);
-            threshold = spriteMaterial.GetFloat("_Threshold");
         }
     }
 }
