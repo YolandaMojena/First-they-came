@@ -37,6 +37,7 @@ public class Flower : MonoBehaviour {
         initialX = transform.position.x;
         targetX = initialX;
         stemRenderer = GetComponent<LineRenderer>();
+        stemRenderer.SetPosition(0, transform.position);
         StartCoroutine(GrowBase());
 	}
 	
@@ -48,7 +49,10 @@ public class Flower : MonoBehaviour {
 
         if (!fullyGrown && Input.GetKeyUp(KeyCode.LeftControl))
             fullyGrown = true;
-	}
+
+        stemRenderer.SetPosition(stemRenderer.numPositions-1, transform.position);
+        //stemRenderer.material.SetTextureScale("_MainTex", new Vector2(0.5f, 1));
+    }
 
     void GrowStem()
     {
@@ -64,6 +68,7 @@ public class Flower : MonoBehaviour {
 
             targetPos.z = transform.position.z;
             transform.position = Vector3.MoveTowards(transform.position, targetPos, Time.deltaTime);
+            stemRenderer.numPositions+=1;
         }
     }
 

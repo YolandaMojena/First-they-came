@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114387976715059030}
   m_Layer: 9
   m_Name: SceneElement
-  m_TagString: Untagged
+  m_TagString: Orificable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,6 +97,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd023e15e2388ec41b2c7d6e5a8c17a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FREQUENCY: 0.05
+  STEP: 0.025
   Orificated: 0
 --- !u!212 &212158904751408300
 SpriteRenderer:
