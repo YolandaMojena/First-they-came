@@ -21,9 +21,9 @@ public class CharacterMovement : MonoBehaviour {
     const float JUMP_HOLD_MULTIPLYIER = 1.25f;
 
     const float RUN_ACCEL = 8f;
-    const float RUN_MAX_SPEED = 6f;
+    const float RUN_MAX_SPEED = 3f;
     const float AIR_RUN_ACCEL = 8f;
-    const float AIR_MAX_SPEED = 4f;
+    const float AIR_MAX_SPEED = 2f;
     const float FRICTION = 15f;
 
     const float MAX_SLOPE_ANGLE = 45f;
@@ -200,7 +200,7 @@ public class CharacterMovement : MonoBehaviour {
         float directionX = Mathf.Sign(traslation.x);
         Vector2 rayOrigin = ((Vector2)transform.position) + (directionX == 1 ? bounds.bottomLeft : bounds.bottomRight);
         RaycastHit2D hit = Physics2D.Raycast(rayOrigin, -Vector2.up, 1f, LayerMask.GetMask("Slope"));
-        Debug.DrawRay(rayOrigin, Vector2.down, Color.green);
+        Debug.DrawRay(rayOrigin + new Vector2(0.01f,0f), Vector2.down, Color.green);
 
         if (hit)
         {
@@ -221,8 +221,8 @@ public class CharacterMovement : MonoBehaviour {
                         traslation.y -= descendTraslation;*/
                         traslation.y -= traslation.x * Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * Mathf.Sign(traslation.x) * -1;
 
-                        if(traslation.y < 0)
-                            velocity.y += traslation.y / Time.deltaTime;
+                        //if(traslation.y < 0)
+                        //    velocity.y += traslation.y / Time.deltaTime;
                         descendSlope = true;
                         grounded = true;
                     }
@@ -296,7 +296,7 @@ public class CharacterMovement : MonoBehaviour {
             }
             grounded = someoneHit;
 
-            //Debug.DrawRay(rayOrigin, rayDirection, Color.red);
+            Debug.DrawRay(rayOrigin, rayDirection, Color.red);
         }
     }
 
