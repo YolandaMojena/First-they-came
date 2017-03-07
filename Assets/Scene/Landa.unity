@@ -130,6 +130,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1665630297146766, guid: 41d326fe9674d77499e54e093516ac8d, type: 2}
+      propertyPath: m_TagString
+      value: Orificable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 41d326fe9674d77499e54e093516ac8d, type: 2}
   m_IsPrefabParent: 0
@@ -239,6 +243,10 @@ Prefab:
     - target: {fileID: 1665630297146766, guid: 41d326fe9674d77499e54e093516ac8d, type: 2}
       propertyPath: m_Name
       value: SceneElement (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1665630297146766, guid: 41d326fe9674d77499e54e093516ac8d, type: 2}
+      propertyPath: m_TagString
+      value: Orificable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 41d326fe9674d77499e54e093516ac8d, type: 2}
@@ -542,6 +550,10 @@ Prefab:
       propertyPath: m_Name
       value: SceneElement (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 1665630297146766, guid: 41d326fe9674d77499e54e093516ac8d, type: 2}
+      propertyPath: m_TagString
+      value: Orificable
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 41d326fe9674d77499e54e093516ac8d, type: 2}
   m_IsPrefabParent: 0
@@ -587,6 +599,10 @@ Prefab:
     - target: {fileID: 1665630297146766, guid: 41d326fe9674d77499e54e093516ac8d, type: 2}
       propertyPath: m_Name
       value: SceneElement (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1665630297146766, guid: 41d326fe9674d77499e54e093516ac8d, type: 2}
+      propertyPath: m_TagString
+      value: Orificable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 41d326fe9674d77499e54e093516ac8d, type: 2}
@@ -675,6 +691,10 @@ Prefab:
     - target: {fileID: 1665630297146766, guid: 41d326fe9674d77499e54e093516ac8d, type: 2}
       propertyPath: m_Name
       value: SceneElement (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1665630297146766, guid: 41d326fe9674d77499e54e093516ac8d, type: 2}
+      propertyPath: m_TagString
+      value: Orificable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 41d326fe9674d77499e54e093516ac8d, type: 2}
