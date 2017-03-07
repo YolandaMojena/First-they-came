@@ -5,7 +5,7 @@ using UnityEngine;
 public class Flower : MonoBehaviour {
 
     [SerializeField]
-    GameObject stem;
+    LineRenderer stem;
 
     [SerializeField]
     float desiredScale;
