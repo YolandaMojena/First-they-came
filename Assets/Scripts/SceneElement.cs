@@ -21,13 +21,13 @@ public class SceneElement : MonoBehaviour {
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteMaterial = spriteRenderer.material;
-        pos = transform.position;
-		
+        pos = transform.position;	
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
+        // This should be substituted by a collision check
         if (Input.GetKeyDown(KeyCode.A) && !Orificated)
         {
             Orificated = true;
@@ -35,6 +35,7 @@ public class SceneElement : MonoBehaviour {
         }	
 	}
 
+    // Coroutine which turns gradually into gold
     IEnumerator Orificate()
     {
         threshold = spriteMaterial.GetFloat("_Threshold");
