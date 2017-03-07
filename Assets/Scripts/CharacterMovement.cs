@@ -234,6 +234,7 @@ public class CharacterMovement : MonoBehaviour {
 
     void HorizontalCollisions()
     {
+        GameObject objectToOrificate = null;
         float directionX = Mathf.Sign(velocity.x);
         float rayLength = Mathf.Abs(traslation.x) + SKIN_WIDTH;
         for(int i = 0; i < horizontalRayNum; i++)
@@ -243,6 +244,9 @@ public class CharacterMovement : MonoBehaviour {
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, rayLength, LayerMask.GetMask("Wall"));
             if (hit)
             {
+                if (hit.collider.gameObject.tag == "Orificable")
+                    objectToOrificate = hit.collider.gameObject;
+
                 velocity.x = 0f;
                 traslation.x = (hit.distance - SKIN_WIDTH) * directionX;
                 rayLength = hit.distance;
@@ -252,6 +256,9 @@ public class CharacterMovement : MonoBehaviour {
 
             Debug.DrawRay(rayOrigin, rayDirection, Color.red);
         }
+
+        if (objectToOrificate != null)
+            objectToOrificate.GetComponent<SceneElement>().TurnIntoGold();
     }
     void VerticalCollisions()
     {
@@ -271,6 +278,7 @@ public class CharacterMovement : MonoBehaviour {
             {
                 if(hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
+
                 traslation.y = (hit.distance - SKIN_WIDTH) * directionY;
 
                 //float angle = Vector2.Angle(Vector2.up, hit.normal) * Mathf.Sign(hit.normal.x);
