@@ -17,8 +17,10 @@ public class CharacterMovement : MonoBehaviour {
 
     const float RUN_ACCEL = 8f;
     const float RUN_MAX_SPEED = 6f;
-    const float AIR_RUN_ACCEL = 4f;
-    const float FRICTION = 9f;
+    const float AIR_RUN_ACCEL = 6f;
+    const float FRICTION = 7f;
+
+    const float MAX_SLOPE_ANGLE = 45f;
 
     
 
@@ -37,10 +39,12 @@ public class CharacterMovement : MonoBehaviour {
 
     Bounds bounds = new Bounds();
 
-    float slopeAngle = 0f;
+    
 
     [SerializeField]
     bool grounded = false;
+    [SerializeField]
+    float slopeAngle = 0f;
     float jumpHoldTime = 0f;
     int run = 0;
 
@@ -114,7 +118,9 @@ public class CharacterMovement : MonoBehaviour {
                 if (Mathf.Sign(run) == Mathf.Sign(velocity.x))
                 {
                     if (Mathf.Abs(velocity.x) < RUN_MAX_SPEED)
-                        acceleration.x += RUN_ACCEL * run;
+                    {
+                        acceleration.x += RUN_ACCEL * run * Mathf.Cos(slopeAngle * Mathf.Deg2Rad);
+                    }
                 }
                 else
                 {
@@ -172,42 +178,61 @@ public class CharacterMovement : MonoBehaviour {
     }
     void VerticalCollisions()
     {
+        bool someoneHit = false;
         float directionY = Mathf.Sign(velocity.y);
+        float directionX = Mathf.Sign(velocity.x);
         if (directionY == 1)
             return;
         float rayLength = Mathf.Abs(translation.y) + SKIN_WIDTH;
         for (int i = 0; i < verticalRayNum; i++)
         {
-            Vector2 rayOrigin = ((Vector2)transform.position) + (directionY == -1 ? bounds.bottomLeft : bounds.topLeft) + i * Vector2.right * verticalRaySpacing;
+            Vector2 rayOrigin = ((Vector2)transform.position) + (directionX == 1 ? bounds.bottomLeft : bounds.bottomRight) + i * Vector2.right * directionX * verticalRaySpacing;
             Vector2 rayDirection = Vector2.up * directionY;
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, rayLength, LayerMask.GetMask("Platform"));
             if (hit)
             {
                 translation.y = (hit.distance - SKIN_WIDTH) * directionY;
                 rayLength = hit.distance;
-                if (directionY == -1)
+                //if (directionY == -1)
+                //{
+                if (!grounded)
                 {
-                    if (!grounded)
-                    {
-                        velocity.y = -0.1f;
-                        acceleration.y = 0f;
-                    }
-                    grounded = true;
+                    velocity.y = -0.1f;
+                    acceleration.y = 0f;
                 }
+                someoneHit = true;
+                //grounded = true;
+                //}
+                slopeAngle = Vector2.Angle(Vector2.up, hit.normal) * Mathf.Sign(hit.normal.x);
+                if (Mathf.Abs(slopeAngle) < MAX_SLOPE_ANGLE) { }
+                    ClimbSlope();
             }
             else
             {
                 grounded = false;
+                slopeAngle = 0f;
             }
+            grounded = someoneHit;
 
             Debug.DrawRay(rayOrigin, rayDirection, Color.red);
         }
+    }
+
+    void ClimbSlope()
+    {
+        /*float moveDistance = Mathf.Abs(translation.x);
+        float climbTranslation = Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * moveDistance;
+        if(climbTranslation > translation.y)
+            translation.y = Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * moveDistance;
+        translation.x = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * moveDistance * Mathf.Sign(translation.x);*/
+        translation.y += translation.x * Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * Mathf.Sign(translation.x);
     }
 
 
     void ApplyPositionChange()
     {
         transform.Translate(translation);
+        //velocity = translation / Time.deltaTime;
     }
 
     void AdjustFacing()
