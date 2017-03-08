@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Orificable
   - Orificated
+  - PlantEntity
+  - GoldEntity
   layers:
   - Default
   - TransparentFX

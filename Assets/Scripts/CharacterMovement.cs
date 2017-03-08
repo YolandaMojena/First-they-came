@@ -50,7 +50,7 @@ public class CharacterMovement : MonoBehaviour {
 
     // Controller
     [SerializeField]
-    bool grounded = false;
+    public bool grounded = false;
     [SerializeField]
     float slopeAngle = 0f;
     [SerializeField]
@@ -244,7 +244,7 @@ public class CharacterMovement : MonoBehaviour {
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, rayLength, LayerMask.GetMask("Wall"));
             if (hit)
             {
-                if (hit.collider.gameObject.tag == "Orificable")
+                if (gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
 
                 velocity.x = 0f;
@@ -276,7 +276,7 @@ public class CharacterMovement : MonoBehaviour {
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, rayLength, LayerMask.GetMask("Platform", "Slope"));
             if (hit)
             {
-                if(hit.collider.gameObject.tag == "Orificable")
+                if(gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
 
                 traslation.y = (hit.distance - SKIN_WIDTH) * directionY;

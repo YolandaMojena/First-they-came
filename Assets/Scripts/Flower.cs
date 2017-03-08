@@ -5,79 +5,75 @@ using UnityEngine;
 public class Flower : MonoBehaviour {
 
     [SerializeField]
-    LineRenderer stem;
-
+    float DESIRED_SCALE = 0.12f;
     [SerializeField]
-    float desiredScale;
+    float GROWTH_RATE = 1.2f;
     [SerializeField]
-    float heightStep = 0.2f;
+    float GROWTH_FREQ = 0.1f;
     [SerializeField]
-    float sideStep = 0.6f;
-
-    float initialHeight;
-    float initialX;
-
-    float targetX;
-    float targetY;
-
+    float MAX_LENGTH = 3.0f;
     [SerializeField]
-    float MAX_HEIGHT = 2.0f;
-    [SerializeField]
-    float MAX_DISPLACEMENT = 5.0f;
+    float SPEED = 0.75f;
 
+    Vector3 initialPos;
     LineRenderer stemRenderer;
+    bool growing = false;
 
-    bool fullyGrown = false;
+    //used to add less points to the lineRenderer
+    const float NEW_POINT_FREQ = 24;
+    float frameCounter;
 
     // Use this for initialization
     void Start () {
 
-        initialHeight = transform.position.y;
-        targetY = initialHeight;
-        initialX = transform.position.x;
-        targetX = initialX;
+        initialPos = transform.position;
         stemRenderer = GetComponent<LineRenderer>();
         stemRenderer.SetPosition(0, transform.position);
+        stemRenderer.SetPosition(1, transform.position);
         StartCoroutine(GrowBase());
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetKey(KeyCode.LeftControl) && !fullyGrown)
-            GrowStem();
-
-        if (!fullyGrown && Input.GetKeyUp(KeyCode.LeftControl))
-            fullyGrown = true;
-
-        stemRenderer.SetPosition(stemRenderer.numPositions-1, transform.position);
-        //stemRenderer.material.SetTextureScale("_MainTex", new Vector2(0.5f, 1));
+        if (growing)
+            GrowStem();    
     }
 
     void GrowStem()
     {
         Vector3 targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        if(Mathf.Abs(transform.position.y - initialHeight) < MAX_HEIGHT)
+        if ((initialPos - transform.position).magnitude >= MAX_LENGTH)
+            growing = false;
+
+        else
         {
             if (targetPos.y < transform.position.y)
                 targetPos.y = transform.position.y;
 
-            if (Mathf.Abs(transform.position.x - initialX) >= MAX_DISPLACEMENT)
-                targetPos.x = transform.position.x;
-
             targetPos.z = transform.position.z;
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, Time.deltaTime);
-            stemRenderer.numPositions+=1;
-        }
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, Time.deltaTime * SPEED);
+
+            frameCounter++;
+            if (frameCounter >= NEW_POINT_FREQ)
+            {
+                stemRenderer.numPositions += 1;
+                frameCounter = 0;
+            }
+
+            stemRenderer.SetPosition(stemRenderer.numPositions - 1, transform.position);
+        } 
     }
 
     IEnumerator GrowBase()
     {
-        while(transform.localScale.x < desiredScale)
+        while(transform.localScale.x < DESIRED_SCALE)
         {
-            yield return new WaitForSecondsRealtime(0.05f);
-            transform.localScale *= 1.2f;
+            yield return new WaitForSecondsRealtime(GROWTH_FREQ);
+            transform.localScale *= GROWTH_RATE;
         }
+
+        growing = true;
     }
 }
