@@ -189,8 +189,10 @@ public class CharacterMovement : MonoBehaviour {
 
     void CalculateDynamics()
     {
-        if(!grounded)
+        if (!grounded)
             velocity += GRAVITY * Time.deltaTime;
+        else
+            velocity.y = -0.1f;
         velocity += acceleration * Time.deltaTime;
         traslation = velocity * Time.deltaTime;
     }
@@ -322,5 +324,14 @@ public class CharacterMovement : MonoBehaviour {
     {
         if(traslation.x > 0.018f || traslation.x < -0.018f)
             sprite.flipX = traslation.x < 0;
+
+        if (Mathf.Abs(slopeAngle) < MAX_SLOPE_ANGLE)
+        {
+            //sprite.transform.eulerAngles = Vector3.Lerp(sprite.transform.eulerAngles, new Vector3(0f, 0f, targetAngle / 3.5f), Time.deltaTime * 10f);
+            Quaternion currentRotation = sprite.transform.rotation;
+            sprite.transform.eulerAngles = new Vector3(sprite.transform.eulerAngles.x, sprite.transform.eulerAngles.y, slopeAngle/3f);
+            Quaternion targetRotation = sprite.transform.rotation;
+            sprite.transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, Time.deltaTime * 10f);
+        }
     }
 }
