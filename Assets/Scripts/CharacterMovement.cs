@@ -273,7 +273,9 @@ public class CharacterMovement : MonoBehaviour {
         {
             Vector2 rayOrigin = ((Vector2)transform.position) + (directionX == -1 ? bounds.bottomLeft : bounds.bottomRight) + i * Vector2.up * horizontalRaySpacing;
             Vector2 rayDirection = Vector2.right * directionX;
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, rayLength, LayerMask.GetMask("Wall", "Pushable"));
+            LayerMask layerMask = isPlayer ? LayerMask.GetMask("Wall", "Pushable") : LayerMask.GetMask("Wall");
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, rayLength, layerMask);
+
             if (hit)
             {
                 bool pushing = false;

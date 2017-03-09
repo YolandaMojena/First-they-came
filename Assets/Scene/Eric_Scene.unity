@@ -1742,7 +1742,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprite: {fileID: 0}
-  WIDTH: 3.4
+  WIDTH: 3.2
   HEIGHT: 0.5
   rayMargins: {x: 1.4, y: 0}
   acceleration: {x: 0, y: 0}
