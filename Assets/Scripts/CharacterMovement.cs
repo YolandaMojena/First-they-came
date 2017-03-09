@@ -9,9 +9,14 @@ public class CharacterMovement : MonoBehaviour {
     public SpriteRenderer sprite;
 
     // CONSTANTS
+    [SerializeField]
+    float WIDTH = 0.23f, HEIGHT = 1.23f;
+
     const float SKIN_WIDTH = 0.015f;
     int verticalRayNum = 3;
     float verticalRaySpacing = 0.11f;
+    [SerializeField]
+    Vector2 rayMargins = Vector2.zero;
     int horizontalRayNum = 4;
     float horizontalRaySpacing = 0.60f;
 
@@ -30,14 +35,17 @@ public class CharacterMovement : MonoBehaviour {
     const float MAX_DESCEND_ANGLE = 45f;
     const float SLOPE_RUN_HANDICAP = 1f / 20f; // 1f/10f
 
-    
+
     // ATRIBUTES
+    bool isPlayer = false;
     // Physics
     Vector2 GRAVITY = new Vector2(0f, -19.81f);
     const float HORIZONTAL_DRAG = 0.5f;
     public Vector2 acceleration = Vector2.zero;
     public Vector2 velocity = Vector2.zero;
     public Vector2 traslation = Vector2.zero;
+
+    public Vector2 externalVelocity = Vector2.zero;
 
     // Aux
     struct Bounds
@@ -61,62 +69,79 @@ public class CharacterMovement : MonoBehaviour {
     [SerializeField]
     int run = 0;
 
-
+    public float LateralBlock = 0;
 
     // METHODS
     void Start()
-    {
-        CalculateBounds();
+    {CalculateBounds();
+        isPlayer = gameObject.layer == LayerMask.NameToLayer("Character");
 
-        if (!sprite)
-        {
-            sprite = GameObject.Find("Sprite").GetComponent<SpriteRenderer>();
+        if (isPlayer) {
             if (!sprite)
-                sprite = GameObject.Find("CharacterSprite").GetComponent<SpriteRenderer>();
+            {
+                sprite = GameObject.Find("Sprite").GetComponent<SpriteRenderer>();
+                if (!sprite)
+                    sprite = GameObject.Find("CharacterSprite").GetComponent<SpriteRenderer>();
+            }
+            //WIDTH = sprite.sprite.bounds.size.x;
+            //HEIGHT = sprite.sprite.bounds.size.y;
+            Debug.Log(WIDTH + ", " + HEIGHT);
         }
+        else
+        {
+            if (!sprite)
+            {
+                sprite = GetComponent<SpriteRenderer>();
+                if (!sprite)
+                    sprite = GetComponentInChildren<SpriteRenderer>();
+            }
+
+            verticalRaySpacing = (WIDTH-rayMargins.x) / (verticalRayNum - 1);
+            horizontalRaySpacing = HEIGHT / (horizontalRayNum - 1);
+        }
+
+
+        
     }
 
     void Update()
     {
-        GatherInput();
+        if (isPlayer)
+            GatherInput();
     }
 
     void FixedUpdate()
     {
         acceleration = Vector2.zero;
 
-        InputToMovement();
+        if(isPlayer)
+            InputToMovement();
 
         CalculateDynamics();
 
         descendSlope = false;
         if (velocity.y <= 0)
             DescendSlope();
-        if(velocity.x != 0)
+        if(velocity.x != 0 || externalVelocity.x != 0)
             HorizontalCollisions();
         VerticalCollisions();
 
         ApplyPositionChange();
         AdjustFacing();
+
+        externalVelocity = Vector2.zero;
     }
-
-
-
-
-
-
-
 
 
 
     void CalculateBounds()
     {
-        float width = 0.23f;
-        float height = 1.23f;
-        bounds.topLeft = new Vector2(-width / 2f + SKIN_WIDTH, height - SKIN_WIDTH);
-        bounds.topRight = new Vector2(width / 2f - SKIN_WIDTH, height - SKIN_WIDTH);
-        bounds.bottomLeft = new Vector2(-width / 2f + SKIN_WIDTH, SKIN_WIDTH);
-        bounds.bottomRight = new Vector2(width / 2f - SKIN_WIDTH, SKIN_WIDTH);
+        //float width = 0.23f;
+        //float height = 1.23f;
+        bounds.topLeft = new Vector2(-WIDTH / 2f + SKIN_WIDTH, HEIGHT - SKIN_WIDTH);
+        bounds.topRight = new Vector2(WIDTH / 2f - SKIN_WIDTH, HEIGHT - SKIN_WIDTH);
+        bounds.bottomLeft = new Vector2(-WIDTH / 2f + SKIN_WIDTH, SKIN_WIDTH);
+        bounds.bottomRight = new Vector2(WIDTH / 2f - SKIN_WIDTH, SKIN_WIDTH);
     }
 
     void GatherInput()
@@ -134,6 +159,11 @@ public class CharacterMovement : MonoBehaviour {
             jumpHoldTime = 0f;
             grounded = false;
         }
+    }
+
+    public void AddExternalVelocity(Vector2 vel)
+    {
+        externalVelocity += vel;
     }
 
     void InputToMovement()
@@ -194,7 +224,7 @@ public class CharacterMovement : MonoBehaviour {
         else
             velocity.y = -0.1f;
         velocity += acceleration * Time.deltaTime;
-        traslation = velocity * Time.deltaTime;
+        traslation = (velocity + externalVelocity) * Time.deltaTime;
     }
 
     void DescendSlope()
@@ -215,7 +245,7 @@ public class CharacterMovement : MonoBehaviour {
                     //if (grounded || hit.distance - SKIN_WIDTH <= Mathf.Tan(Mathf.Abs(descendSlopeAngle) * Mathf.Deg2Rad) * Mathf.Abs(traslation.x))
                     if (grounded || hit.distance - SKIN_WIDTH <= Mathf.Abs(traslation.y))
                     {
-                        Debug.Log("DescendSlope!");
+                        //Debug.Log("DescendSlope!");
                         /*float moveDistance = Mathf.Abs(traslation.x);
                         float descendTraslation = Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * moveDistance * -1;
 
@@ -236,17 +266,35 @@ public class CharacterMovement : MonoBehaviour {
 
     void HorizontalCollisions()
     {
-        float directionX = Mathf.Sign(velocity.x);
+        LateralBlock = 0;
+        float directionX = Mathf.Sign(traslation.x);
         float rayLength = Mathf.Abs(traslation.x) + SKIN_WIDTH;
         for(int i = 0; i < horizontalRayNum; i++)
         {
             Vector2 rayOrigin = ((Vector2)transform.position) + (directionX == -1 ? bounds.bottomLeft : bounds.bottomRight) + i * Vector2.up * horizontalRaySpacing;
             Vector2 rayDirection = Vector2.right * directionX;
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, rayLength, LayerMask.GetMask("Wall"));
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, rayLength, LayerMask.GetMask("Wall", "Pushable"));
             if (hit)
             {
-                velocity.x = 0f;
-                traslation.x = (hit.distance - SKIN_WIDTH) * directionX;
+                bool pushing = false;
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Pushable"))
+                {
+                    SidePushInput sidePushInput = hit.collider.gameObject.GetComponent<SidePushInput>();
+                    if (sidePushInput.Controller.LateralBlock != directionX)
+                    {
+                        pushing = true;
+
+                        sidePushInput.Push(new Vector2(velocity.x, 0f));
+                        //velocity.x /= sidePushInput.Mass;
+                        traslation.x /= sidePushInput.Mass;
+                    }
+                }
+                if(!pushing) // else
+                {
+                    velocity.x = 0f;
+                    traslation.x = (hit.distance - SKIN_WIDTH) * directionX;
+                    LateralBlock = directionX;
+                }
                 rayLength = hit.distance;
             }
 
@@ -263,7 +311,7 @@ public class CharacterMovement : MonoBehaviour {
         float rayLength = Mathf.Abs(traslation.y) + SKIN_WIDTH;
         for (int i = 0; i < verticalRayNum; i++)
         {
-            Vector2 rayOrigin = ((Vector2)transform.position) + (directionX == 1 ? bounds.bottomLeft : bounds.bottomRight) + i * Vector2.right * directionX * verticalRaySpacing;
+            Vector2 rayOrigin = ((Vector2)transform.position) + (directionX == 1 ? bounds.bottomLeft + rayMargins/2f : bounds.bottomRight - rayMargins / 2f) + i * Vector2.right * directionX * verticalRaySpacing;
             Vector2 rayDirection = Vector2.up * directionY;
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, rayLength, LayerMask.GetMask("Platform", "Slope"));
             if (hit)
@@ -322,16 +370,22 @@ public class CharacterMovement : MonoBehaviour {
 
     void AdjustFacing()
     {
-        if(traslation.x > 0.018f || traslation.x < -0.018f)
-            sprite.flipX = traslation.x < 0;
-
+        Transform sloppedTransform = transform;
+        if (isPlayer)
+        {
+            sloppedTransform = sprite.transform;
+            if (traslation.x > 0.018f || traslation.x < -0.018f)
+                sprite.flipX = traslation.x < 0;
+        }
         if (Mathf.Abs(slopeAngle) < MAX_SLOPE_ANGLE)
         {
             //sprite.transform.eulerAngles = Vector3.Lerp(sprite.transform.eulerAngles, new Vector3(0f, 0f, targetAngle / 3.5f), Time.deltaTime * 10f);
-            Quaternion currentRotation = sprite.transform.rotation;
-            sprite.transform.eulerAngles = new Vector3(sprite.transform.eulerAngles.x, sprite.transform.eulerAngles.y, slopeAngle/3f);
-            Quaternion targetRotation = sprite.transform.rotation;
-            sprite.transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, Time.deltaTime * 10f);
+            Quaternion currentRotation = sloppedTransform.transform.rotation;
+            sloppedTransform.transform.eulerAngles = new Vector3(sloppedTransform.transform.eulerAngles.x, sloppedTransform.transform.eulerAngles.y, slopeAngle / 3f);
+            Quaternion targetRotation = sloppedTransform.transform.rotation;
+            sloppedTransform.transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, Time.deltaTime * 10f);
         }
+
+        
     }
 }
