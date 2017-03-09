@@ -1195,7 +1195,7 @@ GameObject:
   - component: {fileID: 512460104}
   - component: {fileID: 512460106}
   - component: {fileID: 512460105}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: Rock_BL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3097,7 +3097,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c46add5ec5f7a4c4a8e638e1ad7e4b72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Controller: {fileID: 0}
+  Controller: {fileID: 805994473}
   Mass: 2
 --- !u!1 &1295288799
 GameObject:
@@ -3558,9 +3558,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.05, y: 0}
   serializedVersion: 2
-  m_Size: {x: 0.52, y: 5.61}
+  m_Size: {x: 0.67, y: 5.61}
 --- !u!212 &1379579198
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5067,7 +5067,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c46add5ec5f7a4c4a8e638e1ad7e4b72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Controller: {fileID: 0}
+  Controller: {fileID: 805994473}
   Mass: 2
 --- !u!1 &2064089124
 GameObject:

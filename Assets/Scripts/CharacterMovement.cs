@@ -58,7 +58,7 @@ public class CharacterMovement : MonoBehaviour {
 
     // Controller
     [SerializeField]
-    bool grounded = false;
+    public bool grounded = false;
     [SerializeField]
     float slopeAngle = 0f;
     [SerializeField]
@@ -267,6 +267,7 @@ public class CharacterMovement : MonoBehaviour {
     void HorizontalCollisions()
     {
         LateralBlock = 0;
+		GameObject objectToOrificate = null;
         float directionX = Mathf.Sign(traslation.x);
         float rayLength = Mathf.Abs(traslation.x) + SKIN_WIDTH;
         for(int i = 0; i < horizontalRayNum; i++)
@@ -297,14 +298,24 @@ public class CharacterMovement : MonoBehaviour {
                     traslation.x = (hit.distance - SKIN_WIDTH) * directionX;
                     LateralBlock = directionX;
                 }
+                if (gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
+                    objectToOrificate = hit.collider.gameObject;
+
+                traslation.x = (hit.distance - SKIN_WIDTH) * directionX;
                 rayLength = hit.distance;
+
+                //hit.collider.gameObject.GetComponent<SceneElement>().TurnIntoGold();
             }
 
             Debug.DrawRay(rayOrigin, rayDirection, Color.red);
         }
+
+        if (objectToOrificate != null)
+            objectToOrificate.GetComponent<SceneElement>().TurnIntoGold();
     }
     void VerticalCollisions()
     {
+        GameObject objectToOrificate = null;
         bool someoneHit = false;
         float directionY = Mathf.Sign(velocity.y);
         float directionX = Mathf.Sign(velocity.x);
@@ -318,11 +329,15 @@ public class CharacterMovement : MonoBehaviour {
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, rayLength, LayerMask.GetMask("Platform", "Slope"));
             if (hit)
             {
+                if(gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
+                    objectToOrificate = hit.collider.gameObject;
+
+                traslation.y = (hit.distance - SKIN_WIDTH) * directionY;
+
                 //float angle = Vector2.Angle(Vector2.up, hit.normal) * Mathf.Sign(hit.normal.x);
                 //if (Mathf.Abs(angle) > 90f+30f)
                 //    continue;
 
-                traslation.y = (hit.distance - SKIN_WIDTH) * directionY;
                 rayLength = hit.distance;
                 //if (directionY == -1)
                 //{
@@ -350,6 +365,9 @@ public class CharacterMovement : MonoBehaviour {
 
             Debug.DrawRay(rayOrigin, rayDirection, Color.red);
         }
+
+        if (grounded && objectToOrificate!=null)
+            objectToOrificate.GetComponent<SceneElement>().TurnIntoGold();
     }
 
     void ClimbSlope()
