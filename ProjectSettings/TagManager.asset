@@ -9,6 +9,10 @@ TagManager:
   - PlantEntity
   - GoldEntity
   - Flower
+  - Killer
+  - ConvertGold
+  - ConvertGoldForever
+  - Grass
   layers:
   - Default
   - TransparentFX
