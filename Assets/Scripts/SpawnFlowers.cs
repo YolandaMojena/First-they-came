@@ -26,6 +26,7 @@ public class SpawnFlowers : MonoBehaviour {
                 if (hit)
                 {
                     GameObject.Instantiate(Resources.Load("Prefabs/Flower"), hit.point, Quaternion.identity);
+                    cooldown = COOLDOWN;
                 }
             }
         }
