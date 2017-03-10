@@ -12,7 +12,7 @@ public class CharacterMovement : MonoBehaviour {
     [SerializeField]
     float WIDTH = 0.23f, HEIGHT = 1.23f;
 
-    const float SKIN_WIDTH = 0.015f;
+    public const float SKIN_WIDTH = 0.015f;
     int verticalRayNum = 3;
     float verticalRaySpacing = 0.11f;
     [SerializeField]
@@ -59,7 +59,7 @@ public class CharacterMovement : MonoBehaviour {
 
     // Controller
     [SerializeField]
-    public bool grounded = false;
+    public bool Grounded = false;
     [SerializeField]
     float slopeAngle = 0f;
     [SerializeField]
@@ -80,9 +80,7 @@ public class CharacterMovement : MonoBehaviour {
         if (isPlayer) {
             if (!sprite)
             {
-                sprite = GameObject.Find("Sprite").GetComponent<SpriteRenderer>();
-                if (!sprite)
-                    sprite = GameObject.Find("CharacterSprite").GetComponent<SpriteRenderer>();
+                sprite = gameObject.GetComponentInChildren<SpriteRenderer>();
             }
             //WIDTH = sprite.sprite.bounds.size.x;
             //HEIGHT = sprite.sprite.bounds.size.y;
@@ -114,8 +112,14 @@ public class CharacterMovement : MonoBehaviour {
     {
         acceleration = Vector2.zero;
 
-        if(isPlayer)
+        if (isPlayer)
+        {
+            
+            if (tag == "PlantEntity")
+                FlowerSpeed();
+
             InputToMovement();
+        }
 
         CalculateDynamics();
 
@@ -152,13 +156,13 @@ public class CharacterMovement : MonoBehaviour {
         if (Input.GetKey(KeyCode.A))
             run += -1;
 
-        if (Input.GetKeyDown(KeyCode.Space) && (grounded || Physics2D.Raycast(transform.position, Vector3.down, 4 * SKIN_WIDTH, LayerMask.GetMask("Slope", "Wall", "Platform"))))
+        if (Input.GetKeyDown(KeyCode.Space) && (Grounded || Physics2D.Raycast(transform.position, Vector3.down, 4 * SKIN_WIDTH, LayerMask.GetMask("Slope", "Wall", "Platform"))))
         {
             //Debug.Log("Jump!");
             velocity.y = JUMP_FORCE;
             velocity.x *= JUMP_BOOST;
             jumpHoldTime = 0f;
-            grounded = false;
+            Grounded = false;
         }
     }
 
@@ -169,7 +173,7 @@ public class CharacterMovement : MonoBehaviour {
 
     void InputToMovement()
     {
-        if (grounded)
+        if (Grounded)
         {
             // RUNNING
             if (run != 0)
@@ -218,9 +222,24 @@ public class CharacterMovement : MonoBehaviour {
         }
     }
 
+    void FlowerSpeed()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 4f*SKIN_WIDTH, LayerMask.GetMask("Slope"));
+        if (hit && hit.collider.tag == "Flower")
+        {
+            Flower flower = hit.collider.gameObject.GetComponent<Flower>();
+            if (flower.Growing && Grounded)
+            {
+                //velocity = new Vector2(flower.Velocity.x, flower.Velocity.y);
+                //transform.position = new Vector3(transform.position.x, hit.point.y, transform.position.z);
+                transform.position += flower.Velocity;
+            }
+        }
+    }
+
     void CalculateDynamics()
     {
-        if (!grounded)
+        if (!Grounded)
             velocity += GRAVITY * Time.deltaTime;
         else
             velocity.y = -0.1f;
@@ -244,7 +263,7 @@ public class CharacterMovement : MonoBehaviour {
                 if (Mathf.Sign(hit.normal.x) == directionX)
                 {
                     //if (grounded || hit.distance - SKIN_WIDTH <= Mathf.Tan(Mathf.Abs(descendSlopeAngle) * Mathf.Deg2Rad) * Mathf.Abs(traslation.x))
-                    if (grounded || hit.distance - SKIN_WIDTH <= Mathf.Abs(traslation.y))
+                    if (Grounded || hit.distance - SKIN_WIDTH <= Mathf.Abs(traslation.y))
                     {
                         //Debug.Log("DescendSlope!");
                         /*float moveDistance = Mathf.Abs(traslation.x);
@@ -257,7 +276,7 @@ public class CharacterMovement : MonoBehaviour {
                         //if(traslation.y < 0)
                         //    velocity.y += traslation.y / Time.deltaTime;
                         descendSlope = true;
-                        grounded = true;
+                        Grounded = true;
                     }
                 }
             }
@@ -313,8 +332,19 @@ public class CharacterMovement : MonoBehaviour {
         }
 
         if (objectToOrificate != null)
-            objectToOrificate.GetComponent<SceneElement>().TurnIntoGold();
+        {
+            SceneElement sceneElement = objectToOrificate.GetComponent<SceneElement>();
+            Transform currentTransform = objectToOrificate.transform;
+            while (!sceneElement && currentTransform.parent != null)
+            {
+                currentTransform = currentTransform.parent;
+                sceneElement = currentTransform.gameObject.GetComponent<SceneElement>();
+            }
+            if (sceneElement)
+                sceneElement.TurnIntoGold();
+        }
     }
+
     void VerticalCollisions()
     {
         GameObject objectToOrificate = null;
@@ -343,9 +373,10 @@ public class CharacterMovement : MonoBehaviour {
                 rayLength = hit.distance;
                 //if (directionY == -1)
                 //{
-                if (!grounded)
+                if (!Grounded)
                 {
-                    velocity.y = -0.1f;
+                    if(hit.collider.tag != "Flower")
+                        velocity.y = -0.1f;
                     acceleration.y = 0f;
                 }
                 someoneHit = true;
@@ -359,20 +390,30 @@ public class CharacterMovement : MonoBehaviour {
             {
                 if (!descendSlope)
                 {
-                    grounded = false;
+                    Grounded = false;
                     slopeAngle = 0f;
                 }
             }
-            grounded = someoneHit;
-            if (grounded)
+            Grounded = someoneHit;
+            if (Grounded)
                 if (Mathf.Abs(velocity.x) > RUN_MAX_SPEED)
                     velocity.x = RUN_MAX_SPEED * Mathf.Sign(velocity.x);
 
             Debug.DrawRay(rayOrigin, rayDirection, Color.red);
         }
 
-        if (grounded && objectToOrificate!=null)
-            objectToOrificate.GetComponent<SceneElement>().TurnIntoGold();
+        if (Grounded && objectToOrificate != null)
+        {
+            SceneElement sceneElement = objectToOrificate.GetComponent<SceneElement>();
+            Transform currentTransform = objectToOrificate.transform;
+            while (!sceneElement && currentTransform.parent != null)
+            {
+                currentTransform = currentTransform.parent;
+                sceneElement = currentTransform.gameObject.GetComponent<SceneElement>();
+            }
+            if(sceneElement)
+                sceneElement.TurnIntoGold();
+        }
     }
 
     void ClimbSlope()
@@ -383,7 +424,7 @@ public class CharacterMovement : MonoBehaviour {
             translation.y = Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * moveDistance;*/
         traslation.x *= Mathf.Pow(Mathf.Abs(Mathf.Cos(slopeAngle * Mathf.Deg2Rad)), SLOPE_RUN_HANDICAP);
         traslation.y += traslation.x * Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * Mathf.Sign(traslation.x) * -1;
-        grounded = true;
+        Grounded = true;
     }
 
 

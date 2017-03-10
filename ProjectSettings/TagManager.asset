@@ -8,6 +8,7 @@ TagManager:
   - Orificated
   - PlantEntity
   - GoldEntity
+  - Flower
   layers:
   - Default
   - TransparentFX

@@ -5,19 +5,27 @@ using UnityEngine;
 public class Flower : MonoBehaviour {
 
     [SerializeField]
+    Transform Target;
+
+    Vector3 previousPosition;
+    public Vector3 Velocity = Vector3.zero;
+
+    //[SerializeField]
     float DESIRED_SCALE = 0.12f;
-    [SerializeField]
+    //[SerializeField]
     float GROWTH_RATE = 1.2f;
-    [SerializeField]
+    //[SerializeField]
     float GROWTH_FREQ = 0.1f;
-    [SerializeField]
-    float MAX_LENGTH = 3.0f;
-    [SerializeField]
-    float SPEED = 0.75f;
+    //[SerializeField]
+    float MAX_LENGTH = 4f;//3.0f;
+    //[SerializeField]
+    float SPEED = 1.25f;//0.75f;
+
+    float SPRITE_WIDTH;
 
     Vector3 initialPos;
     LineRenderer stemRenderer;
-    bool growing = false;
+    public bool Growing = false;
 
     //used to add less points to the lineRenderer
     const float NEW_POINT_FREQ = 24;
@@ -25,28 +33,52 @@ public class Flower : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-
+        SPRITE_WIDTH = GetComponent<SpriteRenderer>().sprite.bounds.size.x;
         initialPos = transform.position;
         stemRenderer = GetComponent<LineRenderer>();
         stemRenderer.SetPosition(0, transform.position);
         stemRenderer.SetPosition(1, transform.position);
         StartCoroutine(GrowBase());
+
+        if (!Target)
+            Target = GameObject.FindGameObjectWithTag("PlantEntity").transform;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-        if (growing)
+        if (Growing)
             GrowStem();    
     }
 
     void GrowStem()
     {
-        Vector3 targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //Vector3 targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        previousPosition = transform.position;
+
+        float traveledDistance = (initialPos - transform.position).magnitude;
+
+        float xDif = (Target.position.x - transform.position.x);
+        xDif *= Mathf.Clamp01(traveledDistance);
+        xDif = Mathf.Clamp(xDif * 1.5f, -1.5f, 1.5f);
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right * Mathf.Sign(xDif), SPRITE_WIDTH / 2f, LayerMask.GetMask("Wall"));
+        if (hit)
+        {
+
+        }
+
+
+        Vector3 targetPos = new Vector3(xDif + Mathf.Sin(traveledDistance * Mathf.PI) * 0.33f, 1f + Mathf.Cos(traveledDistance * Mathf.PI)*0.5f);
+        targetPos.Normalize();
+        targetPos += transform.position;
 
         if ((initialPos - transform.position).magnitude >= MAX_LENGTH)
-            growing = false;
-
+        {
+            Growing = false;
+            Velocity = Vector3.zero;
+        }
         else
         {
             if (targetPos.y < transform.position.y)
@@ -63,7 +95,9 @@ public class Flower : MonoBehaviour {
             }
 
             stemRenderer.SetPosition(stemRenderer.numPositions - 1, transform.position);
-        } 
+        }
+
+        Velocity = transform.position - previousPosition;
     }
 
     IEnumerator GrowBase()
@@ -74,6 +108,6 @@ public class Flower : MonoBehaviour {
             transform.localScale *= GROWTH_RATE;
         }
 
-        growing = true;
+        Growing = true;
     }
 }

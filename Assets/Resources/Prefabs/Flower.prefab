@@ -19,14 +19,13 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4282603508952732}
-  - component: {fileID: 50360515693944752}
   - component: {fileID: 61433307070970156}
   - component: {fileID: 114627635683234396}
   - component: {fileID: 120418023938245474}
   - component: {fileID: 212123440865533054}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: Flower
-  m_TagString: Untagged
+  m_TagString: Flower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -44,26 +43,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &50360515693944752
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1003826183461180}
-  m_BodyType: 2
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!61 &61433307070970156
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -89,11 +68,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01ae18e189f94e9479473dd5fc11de54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DESIRED_SCALE: 0.12
-  GROWTH_RATE: 1.15
-  GROWTH_FREQ: 0.05
-  MAX_LENGTH: 2.5
-  SPEED: 0.75
+  Target: {fileID: 0}
+  Velocity: {x: 0, y: 0, z: 0}
+  Growing: 0
 --- !u!120 &120418023938245474
 LineRenderer:
   m_ObjectHideFlags: 1
