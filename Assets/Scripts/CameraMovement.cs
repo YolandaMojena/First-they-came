@@ -34,7 +34,6 @@ public class CameraMovement : MonoBehaviour {
         else if (targetPos.x >= (rightBound.transform.position.x - size.x / 2))
             targetPos.x = transform.position.x;
 
-
         transform.position = new Vector3(targetPos.x, transform.position.y, transform.position.z);      
     }
 
