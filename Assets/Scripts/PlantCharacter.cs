@@ -12,7 +12,7 @@ public class PlantCharacter : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetKeyDown(KeyCode.S) && GetComponent<CharacterMovement>().grounded)
+        if (Input.GetKeyDown(KeyCode.S) && GetComponent<CharacterMovement>().Grounded)
             GrowPlant();	
 	}
 
