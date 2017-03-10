@@ -1127,6 +1127,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd023e15e2388ec41b2c7d6e5a8c17a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 0}
+  spriteMaterial: {fileID: 0}
+  goldRenderer: {fileID: 0}
+  pos: {x: 0, y: 0}
+  threshold: 1
   FREQUENCY: 0.05
   STEP: 0.025
   Orificated: 0
@@ -2799,6 +2804,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd023e15e2388ec41b2c7d6e5a8c17a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 0}
+  spriteMaterial: {fileID: 0}
+  goldRenderer: {fileID: 0}
+  pos: {x: 0, y: 0}
+  threshold: 1
   FREQUENCY: 0.05
   STEP: 0.025
   Orificated: 0
@@ -3449,6 +3459,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd023e15e2388ec41b2c7d6e5a8c17a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 0}
+  spriteMaterial: {fileID: 0}
+  goldRenderer: {fileID: 0}
+  pos: {x: 0, y: 0}
+  threshold: 1
   FREQUENCY: 0.05
   STEP: 0.025
   Orificated: 0
@@ -3855,6 +3870,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd023e15e2388ec41b2c7d6e5a8c17a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 0}
+  spriteMaterial: {fileID: 0}
+  goldRenderer: {fileID: 0}
+  pos: {x: 0, y: 0}
+  threshold: 1
   FREQUENCY: 0.05
   STEP: 0.025
   Orificated: 0
@@ -4048,6 +4068,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd023e15e2388ec41b2c7d6e5a8c17a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 0}
+  spriteMaterial: {fileID: 0}
+  goldRenderer: {fileID: 0}
+  pos: {x: 0, y: 0}
+  threshold: 1
   FREQUENCY: 0.05
   STEP: 0.025
   Orificated: 0
@@ -4284,6 +4309,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd023e15e2388ec41b2c7d6e5a8c17a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 0}
+  spriteMaterial: {fileID: 0}
+  goldRenderer: {fileID: 0}
+  pos: {x: 0, y: 0}
+  threshold: 1
   FREQUENCY: 0.05
   STEP: 0.025
   Orificated: 0
@@ -4563,6 +4593,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd023e15e2388ec41b2c7d6e5a8c17a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 0}
+  spriteMaterial: {fileID: 0}
+  goldRenderer: {fileID: 0}
+  pos: {x: 0, y: 0}
+  threshold: 1
   FREQUENCY: 0.05
   STEP: 0.025
   Orificated: 0
@@ -4778,6 +4813,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd023e15e2388ec41b2c7d6e5a8c17a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 0}
+  spriteMaterial: {fileID: 0}
+  goldRenderer: {fileID: 0}
+  pos: {x: 0, y: 0}
+  threshold: 1
   FREQUENCY: 0.05
   STEP: 0.025
   Orificated: 0
@@ -5364,6 +5404,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd023e15e2388ec41b2c7d6e5a8c17a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 0}
+  spriteMaterial: {fileID: 0}
+  goldRenderer: {fileID: 0}
+  pos: {x: 0, y: 0}
+  threshold: 1
   FREQUENCY: 0.05
   STEP: 0.025
   Orificated: 0
@@ -5596,6 +5641,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd023e15e2388ec41b2c7d6e5a8c17a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 0}
+  spriteMaterial: {fileID: 0}
+  goldRenderer: {fileID: 0}
+  pos: {x: 0, y: 0}
+  threshold: 1
   FREQUENCY: 0.05
   STEP: 0.025
   Orificated: 0
@@ -5636,6 +5686,10 @@ MonoBehaviour:
   rightBound: {fileID: 1629340201}
   offset: {x: 2, y: 0, z: 0}
   resetVel: 2
+  size: {x: 0, y: 0, z: 0}
+  initPos: {x: 0, y: 0, z: 0}
+  player: {fileID: 0}
+  reset: 0
 --- !u!81 &2114655045
 AudioListener:
   m_ObjectHideFlags: 0
@@ -5826,6 +5880,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd023e15e2388ec41b2c7d6e5a8c17a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 0}
+  spriteMaterial: {fileID: 0}
+  goldRenderer: {fileID: 0}
+  pos: {x: 0, y: 0}
+  threshold: 1
   FREQUENCY: 0.05
   STEP: 0.025
   Orificated: 0
