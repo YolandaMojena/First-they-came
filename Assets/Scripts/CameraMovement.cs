@@ -5,36 +5,60 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour {
 
     [SerializeField]
-    GameObject player;
+    GameObject goldCharacter;
+    [SerializeField]
+    GameObject plantCharacter;
     [SerializeField]
     GameObject leftBound;
     [SerializeField]
     GameObject rightBound;
     [SerializeField]
     Vector3 offset;
+    [SerializeField]
+    float resetVel = 2;
 
     Vector3 size;
+    Vector3 initPos;
+    GameObject player;
+
+
+    bool reset = false;
 
     // Use this for initialization
     void Start()
     {
         size = OrthographicBounds().size;
-        transform.position = new Vector3(player.transform.position.x + offset.x, transform.position.y, transform.position.z);
+        initPos = transform.position;
+        player = goldCharacter;
+        //transform.position = new Vector3(player.transform.position.x + offset.x, transform.position.y, transform.position.z);
         leftBound.transform.position = new Vector3(transform.position.x - size.x / 2, transform.position.y, transform.position.z);
+    }
+
+    void Update()
+    {
+        if (reset)
+        {
+            transform.position = Vector3.Lerp(transform.position, initPos, Time.deltaTime * resetVel);
+            if (Mathf.Abs(transform.position.x - initPos.x) <= 0.1f)
+                reset = false;         
+        }
     }
 
     // LateUpdate is called after Update each frame
     void LateUpdate()
     {
-        Vector3 targetPos = player.transform.position + offset;
+        if (!reset)
+        {
+            Vector3 targetPos = player.transform.position + offset;
 
-        if (targetPos.x <= (leftBound.transform.position.x + size.x / 2))
-            targetPos.x = transform.position.x;
+            if (targetPos.x <= (leftBound.transform.position.x + size.x / 2))
+                targetPos.x = transform.position.x;
 
-        else if (targetPos.x >= (rightBound.transform.position.x - size.x / 2))
-            targetPos.x = transform.position.x;
+            else if (targetPos.x >= (rightBound.transform.position.x - size.x / 2))
+                targetPos.x = transform.position.x;
 
-        transform.position = new Vector3(targetPos.x, transform.position.y, transform.position.z);      
+            transform.position = new Vector3(targetPos.x, transform.position.y, transform.position.z);
+        }         
     }
 
     Bounds OrthographicBounds()
@@ -45,5 +69,11 @@ public class CameraMovement : MonoBehaviour {
             Camera.main.transform.position,
             new Vector3(cameraHeight * screenAspect, cameraHeight, 0));
         return bounds;
+    }
+
+    public void ResetCamera() {
+
+        reset = true;
+        player = plantCharacter;
     }
 }

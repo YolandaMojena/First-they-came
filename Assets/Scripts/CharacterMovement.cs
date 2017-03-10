@@ -48,6 +48,8 @@ public class CharacterMovement : MonoBehaviour {
 
     public Vector2 externalVelocity = Vector2.zero;
 
+    Vector3 startPos;
+
     // Aux
     struct Bounds
     {
@@ -74,7 +76,10 @@ public class CharacterMovement : MonoBehaviour {
 
     // METHODS
     void Start()
-    {CalculateBounds();
+    {
+        startPos = transform.position;
+
+        CalculateBounds();
         isPlayer = gameObject.layer == LayerMask.NameToLayer("Character");
 
         if (isPlayer) {
@@ -319,8 +324,11 @@ public class CharacterMovement : MonoBehaviour {
                     LateralBlock = directionX;
                 }
                 objectToOrificate = null;
+
                 if (gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
+                else if (gameObject.tag == "PlantEntity" && hit.collider.gameObject.transform.parent.tag == "Orificated")
+                    StartCoroutine("WaitForDeath");
 
                 traslation.x = (hit.distance - SKIN_WIDTH) * directionX;
                 rayLength = hit.distance;
@@ -363,6 +371,8 @@ public class CharacterMovement : MonoBehaviour {
             {
                 if(gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
+                else if (gameObject.tag == "PlantEntity" && hit.collider.gameObject.transform.parent.tag == "Orificated")
+                    StartCoroutine("WaitForDeath");
 
                 traslation.y = (hit.distance - SKIN_WIDTH) * directionY;
 
@@ -450,8 +460,13 @@ public class CharacterMovement : MonoBehaviour {
             sloppedTransform.transform.eulerAngles = new Vector3(sloppedTransform.transform.eulerAngles.x, sloppedTransform.transform.eulerAngles.y, slopeAngle / 3f);
             Quaternion targetRotation = sloppedTransform.transform.rotation;
             sloppedTransform.transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, Time.deltaTime * 10f);
-        }
+        }     
+    }
 
-        
+    IEnumerator WaitForDeath()
+    {
+        yield return new WaitForSecondsRealtime(1.5f);
+        transform.position = startPos;
+        Camera.main.GetComponent<CameraMovement>().ResetCamera();
     }
 }
