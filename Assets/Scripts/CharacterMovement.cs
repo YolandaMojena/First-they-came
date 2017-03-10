@@ -22,13 +22,14 @@ public class CharacterMovement : MonoBehaviour {
 
 
     const float JUMP_FORCE = 5f;
+    const float JUMP_BOOST = 1.4f;
     const float JUMP_HOLD_TIME = 0.2f;
-    const float JUMP_HOLD_MULTIPLYIER = 1.25f;
+    const float JUMP_HOLD_MULTIPLYIER = 0.75f;
 
     const float RUN_ACCEL = 8f;
     const float RUN_MAX_SPEED = 3f;
-    const float AIR_RUN_ACCEL = 8f;
-    const float AIR_MAX_SPEED = 2f;
+    const float AIR_RUN_ACCEL = 10f;
+    const float AIR_MAX_SPEED = 2.5f;
     const float FRICTION = 15f;
 
     const float MAX_SLOPE_ANGLE = 45f;
@@ -85,7 +86,6 @@ public class CharacterMovement : MonoBehaviour {
             }
             //WIDTH = sprite.sprite.bounds.size.x;
             //HEIGHT = sprite.sprite.bounds.size.y;
-            Debug.Log(WIDTH + ", " + HEIGHT);
         }
         else
         {
@@ -152,10 +152,11 @@ public class CharacterMovement : MonoBehaviour {
         if (Input.GetKey(KeyCode.A))
             run += -1;
 
-        if (grounded && Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && (grounded || Physics2D.Raycast(transform.position, Vector3.down, 4 * SKIN_WIDTH, LayerMask.GetMask("Slope", "Wall", "Platform"))))
         {
             //Debug.Log("Jump!");
             velocity.y = JUMP_FORCE;
+            velocity.x *= JUMP_BOOST;
             jumpHoldTime = 0f;
             grounded = false;
         }
@@ -292,12 +293,13 @@ public class CharacterMovement : MonoBehaviour {
                         traslation.x /= sidePushInput.Mass;
                     }
                 }
+                
                 if(!pushing) // else
                 {
                     velocity.x = 0f;
-                    traslation.x = (hit.distance - SKIN_WIDTH) * directionX;
                     LateralBlock = directionX;
                 }
+                objectToOrificate = null;
                 if (gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
 
@@ -362,6 +364,9 @@ public class CharacterMovement : MonoBehaviour {
                 }
             }
             grounded = someoneHit;
+            if (grounded)
+                if (Mathf.Abs(velocity.x) > RUN_MAX_SPEED)
+                    velocity.x = RUN_MAX_SPEED * Mathf.Sign(velocity.x);
 
             Debug.DrawRay(rayOrigin, rayDirection, Color.red);
         }

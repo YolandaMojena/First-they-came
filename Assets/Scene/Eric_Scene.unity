@@ -3098,7 +3098,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Controller: {fileID: 805994473}
-  Mass: 2
+  Mass: 4
 --- !u!1 &1295288799
 GameObject:
   m_ObjectHideFlags: 0
@@ -5068,7 +5068,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Controller: {fileID: 805994473}
-  Mass: 2
+  Mass: 4
 --- !u!1 &2064089124
 GameObject:
   m_ObjectHideFlags: 0

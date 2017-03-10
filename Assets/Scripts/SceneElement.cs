@@ -10,7 +10,7 @@ public class SceneElement : MonoBehaviour {
     Vector2 pos;
 
     //Dissolve
-    float threshold;
+    float threshold = 1f;
     [SerializeField]
     float FREQUENCY = 0.05f;
     [SerializeField]
@@ -20,9 +20,10 @@ public class SceneElement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+        gameObject.tag = "Orificable";
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteMaterial = spriteRenderer.materials[0];
+        spriteRenderer.material.SetFloat("_Threshold", 1f);
         pos = transform.position;	
 	}
 
@@ -40,9 +41,9 @@ public class SceneElement : MonoBehaviour {
     IEnumerator Orificate()
     {
         threshold = spriteRenderer.material.GetFloat("_Threshold");
-        while (threshold < 1)
+        while (threshold > 0)
         {   
-            spriteRenderer.material.SetFloat("_Threshold", threshold + STEP);
+            spriteRenderer.material.SetFloat("_Threshold", threshold - STEP);
             threshold = spriteRenderer.material.GetFloat("_Threshold");
             yield return new WaitForSecondsRealtime(FREQUENCY);
         }

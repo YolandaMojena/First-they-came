@@ -50,8 +50,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1696031206079352}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.96, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_Children: []
   m_Father: {fileID: 4779518061736282}
   m_RootOrder: 0
@@ -63,7 +63,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1681767541354534}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4, y: -1.229, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4391318794466700}
@@ -81,11 +81,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8010f3ec8ec1d64691d84db99c0bccd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sprite: {fileID: 0}
+  WIDTH: 0.23
+  HEIGHT: 1.23
+  rayMargins: {x: 0, y: 0}
   acceleration: {x: 0, y: 0}
   velocity: {x: 0, y: 0}
-  translation: {x: 0, y: 0}
+  traslation: {x: 0, y: 0}
+  externalVelocity: {x: 0, y: 0}
   grounded: 0
   slopeAngle: 0
+  climbSlope: 0
+  descendSlope: 0
+  run: 0
+  LateralBlock: 0
 --- !u!212 &212651602198630804
 SpriteRenderer:
   m_ObjectHideFlags: 1
