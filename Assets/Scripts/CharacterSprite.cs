@@ -10,6 +10,8 @@ public class CharacterSprite : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        if(!target)
+            target = transform.parent;
         transform.parent = null;
         offset =  transform.position - target.position;
 	}

@@ -8,6 +8,7 @@ TagManager:
   - Orificated
   - PlantEntity
   - GoldEntity
+  - Flower
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - Platform
   - Wall
   - Slope
-  - 
+  - Pushable
   - 
   - 
   - 
