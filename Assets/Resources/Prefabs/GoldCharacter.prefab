@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4779518061736282}
   - component: {fileID: 114123185068763142}
-  - component: {fileID: 114171780650877716}
   m_Layer: 8
   m_Name: GoldCharacter
   m_TagString: GoldEntity
@@ -177,17 +176,6 @@ MonoBehaviour:
   descendSlope: 0
   run: 0
   LateralBlock: 0
---- !u!114 &114171780650877716
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1681767541354534}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4917e5fb03543fa48b161ef050178006, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!124 &124512981162269182
 Behaviour:
   m_ObjectHideFlags: 1

@@ -21,7 +21,7 @@ public class Flower : MonoBehaviour {
     //[SerializeField]
     float SPEED = 1.25f;//0.75f;
 
-    float SPRITE_WIDTH;
+    float WIDTH;
 
     Vector3 initialPos;
     LineRenderer stemRenderer;
@@ -33,7 +33,7 @@ public class Flower : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        SPRITE_WIDTH = GetComponent<SpriteRenderer>().sprite.bounds.size.x;
+        WIDTH = GetComponent<BoxCollider2D>().size.x * transform.lossyScale.x;
         initialPos = transform.position;
         stemRenderer = GetComponent<LineRenderer>();
         stemRenderer.SetPosition(0, transform.position);
@@ -63,10 +63,11 @@ public class Flower : MonoBehaviour {
         xDif *= Mathf.Clamp01(traveledDistance);
         xDif = Mathf.Clamp(xDif * 1.5f, -1.5f, 1.5f);
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right * Mathf.Sign(xDif), SPRITE_WIDTH / 2f, LayerMask.GetMask("Wall"));
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right * Mathf.Sign(xDif), 1.2f, LayerMask.GetMask("Wall"));
         if (hit)
         {
-
+            if (Mathf.Sign(hit.normal.x) != Mathf.Sign(xDif))
+                xDif = 0;
         }
 
 
