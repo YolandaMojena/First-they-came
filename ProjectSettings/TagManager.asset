@@ -4,6 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Orificable
+  - Orificated
+  - PlantEntity
+  - GoldEntity
+  - Flower
   - Killer
   - ConvertGold
   - ConvertGoldForever
@@ -17,11 +22,11 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Character
+  - Platform
+  - Wall
+  - Slope
+  - Pushable
   - 
   - 
   - 
