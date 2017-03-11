@@ -13,6 +13,9 @@ public class CameraMovement : MonoBehaviour {
     [SerializeField]
     GameObject rightBound;
     [SerializeField]
+    GameObject topBound;
+
+    [SerializeField]
     Vector3 offset;
     [SerializeField]
     float resetVel = 2;
@@ -31,6 +34,7 @@ public class CameraMovement : MonoBehaviour {
         initPos = transform.position;
         player = goldCharacter;
         leftBound.transform.position = new Vector3(transform.position.x - size.x / 2, transform.position.y, transform.position.z);
+        topBound.transform.position = new Vector3(transform.position.x, transform.position.y - size.y / 2, transform.position.z);
     }
 
     void Update()
@@ -53,13 +57,17 @@ public class CameraMovement : MonoBehaviour {
         {
             Vector3 targetPos = player.transform.position + offset;
 
+
+            if (targetPos.y >= (topBound.transform.position.y + size.y / 2))
+                targetPos.y = transform.position.y;
+
             if (targetPos.x <= (leftBound.transform.position.x + size.x / 2))
                 targetPos.x = transform.position.x;
 
             else if (targetPos.x >= (rightBound.transform.position.x - size.x / 2))
                 targetPos.x = transform.position.x;
 
-            transform.position = new Vector3(targetPos.x, transform.position.y, transform.position.z);
+            transform.position = new Vector3(targetPos.x, targetPos.y, transform.position.z);
         }         
     }
 

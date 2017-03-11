@@ -784,67 +784,6 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 6.23, y: 1}
---- !u!1 &243139490
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 243139492}
-  - component: {fileID: 243139491}
-  m_Layer: 0
-  m_Name: LevelManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &243139491
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 243139490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 077a6951f702f4d418b367a0fae7d67f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentCheckpoint: {fileID: 346056159}
-  player: {fileID: 0}
-  goldParticle: {fileID: 1215713525956086, guid: e7a5b463edd884c22833ebe5986fe92c,
-    type: 2}
-  goldParticleInf: {fileID: 1744460115486252, guid: 213217f57a45a4ff6b5b0e894aa0c57d,
-    type: 2}
-  goldLeavesParticle: {fileID: 1119917219658500, guid: 8488dc52c05384c8a8308c321033458b,
-    type: 2}
-  deathParticle: {fileID: 1546047297307524, guid: 2ac33ccf8c7044a00bb6d1f1cc0ed425,
-    type: 2}
-  checkpointParticle: {fileID: 1546047297307524, guid: 2ac33ccf8c7044a00bb6d1f1cc0ed425,
-    type: 2}
-  checkpointDelay: 1.5
-  plantParticle: {fileID: 1030282465886764, guid: e48dfd3b1972a4c3084a955eef451a3c,
-    type: 2}
-  grassParticle: {fileID: 1929267044173378, guid: 4b12324291c9b4207a70db3ca7729f86,
-    type: 2}
-  grassDelay: 0
-  goldCharacter: {fileID: 1976827481}
-  plantCharacter: {fileID: 526690544}
-  levelEnd: {fileID: 1074479957}
---- !u!4 &243139492
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 243139490}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.3683186, y: -3.9852583, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 11
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &254439576
 GameObject:
   m_ObjectHideFlags: 0
@@ -1168,7 +1107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 346056160}
   m_Layer: 0
-  m_Name: CheckPoint
+  m_Name: CheckPointInicial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1181,7 +1120,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 346056159}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -37.49, y: -6.9, z: 0}
+  m_LocalPosition: {x: -37.49, y: -7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2041,6 +1980,68 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.75, y: 0.75}
+--- !u!1001 &778177888
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4286489724579288, guid: 2429c7237624c0b489fae64ed5dbc439, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -4.3683186
+      objectReference: {fileID: 0}
+    - target: {fileID: 4286489724579288, guid: 2429c7237624c0b489fae64ed5dbc439, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -3.9852583
+      objectReference: {fileID: 0}
+    - target: {fileID: 4286489724579288, guid: 2429c7237624c0b489fae64ed5dbc439, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4286489724579288, guid: 2429c7237624c0b489fae64ed5dbc439, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4286489724579288, guid: 2429c7237624c0b489fae64ed5dbc439, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4286489724579288, guid: 2429c7237624c0b489fae64ed5dbc439, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4286489724579288, guid: 2429c7237624c0b489fae64ed5dbc439, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4286489724579288, guid: 2429c7237624c0b489fae64ed5dbc439, type: 2}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 114136350309563822, guid: 2429c7237624c0b489fae64ed5dbc439,
+        type: 2}
+      propertyPath: currentCheckpoint
+      value: 
+      objectReference: {fileID: 346056159}
+    - target: {fileID: 114136350309563822, guid: 2429c7237624c0b489fae64ed5dbc439,
+        type: 2}
+      propertyPath: goldCharacter
+      value: 
+      objectReference: {fileID: 1976827481}
+    - target: {fileID: 114136350309563822, guid: 2429c7237624c0b489fae64ed5dbc439,
+        type: 2}
+      propertyPath: plantCharacter
+      value: 
+      objectReference: {fileID: 526690544}
+    - target: {fileID: 114136350309563822, guid: 2429c7237624c0b489fae64ed5dbc439,
+        type: 2}
+      propertyPath: levelEnd
+      value: 
+      objectReference: {fileID: 1074479957}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 2429c7237624c0b489fae64ed5dbc439, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &781887879
 GameObject:
   m_ObjectHideFlags: 0
@@ -2526,7 +2527,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4924973904120258, guid: 55caa2a80b065c149babe09151d8509e, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -6.9
+      value: -7
       objectReference: {fileID: 0}
     - target: {fileID: 4924973904120258, guid: 55caa2a80b065c149babe09151d8509e, type: 2}
       propertyPath: m_LocalPosition.z
@@ -5071,7 +5072,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4779518061736282, guid: c888c300daf9ca74c9ad16b7323a8486, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -6.9
+      value: -7
       objectReference: {fileID: 0}
     - target: {fileID: 4779518061736282, guid: c888c300daf9ca74c9ad16b7323a8486, type: 2}
       propertyPath: m_LocalPosition.z
@@ -5784,7 +5785,7 @@ MonoBehaviour:
   plantCharacter: {fileID: 526690544}
   leftBound: {fileID: 167253921}
   rightBound: {fileID: 1629340201}
-  offset: {x: 2, y: 0, z: 0}
+  offset: {x: 2, y: 5, z: 0}
   resetVel: 2
 --- !u!81 &2114655045
 AudioListener:
@@ -5848,7 +5849,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2114655043}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -31.1, y: -1.96, z: -10}
+  m_LocalPosition: {x: -31.1, y: -2, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

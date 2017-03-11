@@ -13,6 +13,7 @@ TagManager:
   - ConvertGold
   - ConvertGoldForever
   - Grass
+  - Interruptor
   layers:
   - Default
   - TransparentFX
