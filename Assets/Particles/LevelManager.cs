@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour {
@@ -98,6 +99,6 @@ public class LevelManager : MonoBehaviour {
     {
         yield return new WaitForSecondsRealtime(1.5f);
         //HAY QUE CONFIGURAR LOS BUILD SETTINGS PARA LAS ESCENAS
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1, LoadSceneMode.Additive);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1, LoadSceneMode.Additive);
     }
 }
