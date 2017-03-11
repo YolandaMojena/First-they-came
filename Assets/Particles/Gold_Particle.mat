@@ -6,9 +6,9 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: SceneElement
-  m_Shader: {fileID: 4800000, guid: 9698ef5541f35c0459fdf66f5f8c12aa, type: 3}
-  m_ShaderKeywords: _ALPHATEST_ON _EMISSION
+  m_Name: Gold_Particle
+  m_Shader: {fileID: 203, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: _EMISSION
   m_LightmapFlags: 1
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -40,12 +40,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
-        name: _DissolveTex
-      second:
-        m_Texture: {fileID: 2800000, guid: ffc8a57df54f4884a89156c7dde58683, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
         name: _EmissionMap
       second:
         m_Texture: {fileID: 0}
@@ -54,7 +48,7 @@ Material:
     - first:
         name: _MainTex
       second:
-        m_Texture: {fileID: 2800000, guid: b993a8613c2d4924d9b6c775e08fb38c, type: 3}
+        m_Texture: {fileID: 2800000, guid: 593f178e528b74ecb81ab890c3d0794e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
@@ -77,9 +71,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - first:
-        name: PixelSnap
-      second: 0
-    - first:
         name: _BumpScale
       second: 1
     - first:
@@ -89,29 +80,26 @@ Material:
         name: _DetailNormalMapScale
       second: 1
     - first:
-        name: _DissolvePower
-      second: 0
-    - first:
         name: _DstBlend
-      second: 0
-    - first:
-        name: _EmissionThickness
       second: 0
     - first:
         name: _GlossMapScale
       second: 1
     - first:
         name: _Glossiness
-      second: 0
+      second: 0.5
     - first:
         name: _GlossyReflections
+      second: 1
+    - first:
+        name: _InvFade
       second: 1
     - first:
         name: _Metallic
       second: 0
     - first:
         name: _Mode
-      second: 1
+      second: 0
     - first:
         name: _OcclusionStrength
       second: 1
@@ -128,9 +116,6 @@ Material:
         name: _SrcBlend
       second: 1
     - first:
-        name: _Threshold
-      second: 0
-    - first:
         name: _UVSec
       second: 0
     - first:
@@ -142,4 +127,7 @@ Material:
       second: {r: 1, g: 1, b: 1, a: 1}
     - first:
         name: _EmissionColor
-      second: {r: 0.9764706, g: 0.73333335, b: 0.07450981, a: 0.322}
+      second: {r: 0, g: 0, b: 0, a: 1}
+    - first:
+        name: _TintColor
+      second: {r: 1, g: 1, b: 1, a: 1}

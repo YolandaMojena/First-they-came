@@ -42,6 +42,7 @@ public class CharacterMovement : MonoBehaviour {
 
     // ATRIBUTES
     bool isPlayer = false;
+    public bool isDead = false;
     // Physics
     Vector2 GRAVITY = new Vector2(0f, -19.81f);
     const float HORIZONTAL_DRAG = 0.5f;
@@ -50,6 +51,8 @@ public class CharacterMovement : MonoBehaviour {
     public Vector2 traslation = Vector2.zero;
 
     public Vector2 externalVelocity = Vector2.zero;
+
+    Vector3 startPos;
 
     // Aux
     struct Bounds
@@ -78,7 +81,10 @@ public class CharacterMovement : MonoBehaviour {
 
     // METHODS
     void Start()
-    {CalculateBounds();
+    {
+        startPos = transform.position;
+
+        CalculateBounds();
         isPlayer = gameObject.layer == LayerMask.NameToLayer("Character");
 
         if (isPlayer) {
@@ -325,13 +331,14 @@ public class CharacterMovement : MonoBehaviour {
                     LateralBlock = directionX;
                 }
                 objectToOrificate = null;
+
                 if (gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
+                else if (gameObject.tag == "PlantEntity" && hit.collider.gameObject.tag != "Flower" && hit.collider.gameObject.transform.parent.tag == "Orificated")
+                    KillPlantEntity();
 
                 traslation.x = (hit.distance - SKIN_WIDTH) * directionX;
                 rayLength = hit.distance;
-
-                //hit.collider.gameObject.GetComponent<SceneElement>().TurnIntoGold();
             }
 
             Debug.DrawRay(rayOrigin, rayDirection, Color.red);
@@ -347,7 +354,12 @@ public class CharacterMovement : MonoBehaviour {
                 sceneElement = currentTransform.gameObject.GetComponent<SceneElement>();
             }
             if (sceneElement)
+            {
                 sceneElement.TurnIntoGold();
+                if (sceneElement.othersToOrificate != null)
+                    foreach (SceneElement s in sceneElement.othersToOrificate)
+                        s.TurnIntoGold();
+            }   
         }
     }
 
@@ -369,6 +381,8 @@ public class CharacterMovement : MonoBehaviour {
             {
                 if(gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
+                else if (gameObject.tag == "PlantEntity" && hit.collider.gameObject.tag != "Flower" && hit.collider.gameObject.transform.parent.tag == "Orificated")
+                    KillPlantEntity();
 
                 traslation.y = (hit.distance - SKIN_WIDTH) * directionY;
 
@@ -417,8 +431,13 @@ public class CharacterMovement : MonoBehaviour {
                 currentTransform = currentTransform.parent;
                 sceneElement = currentTransform.gameObject.GetComponent<SceneElement>();
             }
-            if(sceneElement)
+            if (sceneElement)
+            {
                 sceneElement.TurnIntoGold();
+                if (sceneElement.othersToOrificate != null)
+                    foreach (SceneElement s in sceneElement.othersToOrificate)
+                        s.TurnIntoGold();
+            }
         }
     }
 
@@ -464,8 +483,20 @@ public class CharacterMovement : MonoBehaviour {
             sloppedTransform.transform.eulerAngles = new Vector3(sloppedTransform.transform.eulerAngles.x, sloppedTransform.transform.eulerAngles.y, slopeAngle / 3f);
             Quaternion targetRotation = sloppedTransform.transform.rotation;
             sloppedTransform.transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, Time.deltaTime * 10f);
-        }
+        }     
+    }
 
-        
+    void KillPlantEntity()
+    {
+        if (!isDead)
+        {
+            isDead = true;
+            foreach (GameObject g in GameObject.FindGameObjectsWithTag("Flower"))
+                GameObject.DestroyImmediate(g);
+
+            //transform.position = startPos;
+            LevelManager.levelManager.RespawnPlayer();
+            //Camera.main.GetComponent<CameraMovement>().ResetCamera();
+        }
     }
 }

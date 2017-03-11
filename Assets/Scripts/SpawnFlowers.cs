@@ -9,8 +9,8 @@ public class SpawnFlowers : MonoBehaviour {
 
     CharacterMovement controller;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         controller = GetComponent<CharacterMovement>();
 	}
 	
@@ -27,6 +27,9 @@ public class SpawnFlowers : MonoBehaviour {
                 {
                     GameObject.Instantiate(Resources.Load("Prefabs/Flower"), hit.point, Quaternion.identity);
                     cooldown = COOLDOWN;
+
+                    // PARTICLES AND SOUND
+                    LevelManager.levelManager.Plant();        
                 }
             }
         }
