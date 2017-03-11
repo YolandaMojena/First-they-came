@@ -30,7 +30,6 @@ public class CameraMovement : MonoBehaviour {
         size = OrthographicBounds().size;
         initPos = transform.position;
         player = goldCharacter;
-        //transform.position = new Vector3(player.transform.position.x + offset.x, transform.position.y, transform.position.z);
         leftBound.transform.position = new Vector3(transform.position.x - size.x / 2, transform.position.y, transform.position.z);
     }
 
@@ -40,7 +39,10 @@ public class CameraMovement : MonoBehaviour {
         {
             transform.position = Vector3.Lerp(transform.position, initPos, Time.deltaTime * resetVel);
             if (Mathf.Abs(transform.position.x - initPos.x) <= 0.1f)
-                reset = false;         
+            {
+                reset = false;
+                player.SetActive(true);
+            }               
         }
     }
 
@@ -75,5 +77,10 @@ public class CameraMovement : MonoBehaviour {
 
         reset = true;
         player = plantCharacter;
+    }
+
+    public void ResetForDeath()
+    {
+        reset = true;
     }
 }

@@ -39,6 +39,7 @@ public class CharacterMovement : MonoBehaviour {
 
     // ATRIBUTES
     bool isPlayer = false;
+    public bool isDead = false;
     // Physics
     Vector2 GRAVITY = new Vector2(0f, -19.81f);
     const float HORIZONTAL_DRAG = 0.5f;
@@ -327,13 +328,11 @@ public class CharacterMovement : MonoBehaviour {
 
                 if (gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
-                else if (gameObject.tag == "PlantEntity" && hit.collider.gameObject.transform.parent.tag == "Orificated")
-                    StartCoroutine("WaitForDeath");
+                else if (gameObject.tag == "PlantEntity" && hit.collider.gameObject.tag != "Flower" && hit.collider.gameObject.transform.parent.tag == "Orificated")
+                    KillPlantEntity();
 
                 traslation.x = (hit.distance - SKIN_WIDTH) * directionX;
                 rayLength = hit.distance;
-
-                //hit.collider.gameObject.GetComponent<SceneElement>().TurnIntoGold();
             }
 
             Debug.DrawRay(rayOrigin, rayDirection, Color.red);
@@ -349,7 +348,12 @@ public class CharacterMovement : MonoBehaviour {
                 sceneElement = currentTransform.gameObject.GetComponent<SceneElement>();
             }
             if (sceneElement)
+            {
                 sceneElement.TurnIntoGold();
+                if (sceneElement.othersToOrificate != null)
+                    foreach (SceneElement s in sceneElement.othersToOrificate)
+                        s.TurnIntoGold();
+            }   
         }
     }
 
@@ -371,8 +375,8 @@ public class CharacterMovement : MonoBehaviour {
             {
                 if(gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
-                else if (gameObject.tag == "PlantEntity" && hit.collider.gameObject.transform.parent.tag == "Orificated")
-                    StartCoroutine("WaitForDeath");
+                else if (gameObject.tag == "PlantEntity" && hit.collider.gameObject.tag != "Flower" && hit.collider.gameObject.transform.parent.tag == "Orificated")
+                    KillPlantEntity();
 
                 traslation.y = (hit.distance - SKIN_WIDTH) * directionY;
 
@@ -421,8 +425,13 @@ public class CharacterMovement : MonoBehaviour {
                 currentTransform = currentTransform.parent;
                 sceneElement = currentTransform.gameObject.GetComponent<SceneElement>();
             }
-            if(sceneElement)
+            if (sceneElement)
+            {
                 sceneElement.TurnIntoGold();
+                if (sceneElement.othersToOrificate != null)
+                    foreach (SceneElement s in sceneElement.othersToOrificate)
+                        s.TurnIntoGold();
+            }
         }
     }
 
@@ -463,10 +472,17 @@ public class CharacterMovement : MonoBehaviour {
         }     
     }
 
-    IEnumerator WaitForDeath()
+    void KillPlantEntity()
     {
-        yield return new WaitForSecondsRealtime(1.5f);
-        transform.position = startPos;
-        Camera.main.GetComponent<CameraMovement>().ResetCamera();
+        if (!isDead)
+        {
+            isDead = true;
+            foreach (GameObject g in GameObject.FindGameObjectsWithTag("Flower"))
+                GameObject.DestroyImmediate(g);
+
+            //transform.position = startPos;
+            LevelManager.levelManager.RespawnPlayer();
+            //Camera.main.GetComponent<CameraMovement>().ResetCamera();
+        }
     }
 }
