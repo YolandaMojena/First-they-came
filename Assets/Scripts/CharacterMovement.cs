@@ -6,7 +6,10 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour {
 
     // TO BE MANUALLY ASSIGNED IN EDITOR
-    public SpriteRenderer sprite;
+    [SerializeField]
+    SpriteRenderer sprite;
+    [SerializeField]
+    Animator animator;
 
     // CONSTANTS
     [SerializeField]
@@ -69,6 +72,7 @@ public class CharacterMovement : MonoBehaviour {
     float jumpHoldTime = 0f;
     [SerializeField]
     int run = 0;
+    bool jump = false;
 
     public float LateralBlock = 0;
 
@@ -82,6 +86,8 @@ public class CharacterMovement : MonoBehaviour {
             {
                 sprite = gameObject.GetComponentInChildren<SpriteRenderer>();
             }
+            if (!animator)
+                animator = GetComponentInChildren<Animator>();
             //WIDTH = sprite.sprite.bounds.size.x;
             //HEIGHT = sprite.sprite.bounds.size.y;
         }
@@ -131,7 +137,7 @@ public class CharacterMovement : MonoBehaviour {
         VerticalCollisions();
 
         ApplyPositionChange();
-        AdjustFacing();
+        AdjustSprite();
 
         externalVelocity = Vector2.zero;
     }
@@ -434,15 +440,23 @@ public class CharacterMovement : MonoBehaviour {
         //velocity = translation / Time.deltaTime;
     }
 
-    void AdjustFacing()
+    void AdjustSprite()
     {
         Transform sloppedTransform = transform;
+
         if (isPlayer)
         {
             sloppedTransform = sprite.transform;
             if (traslation.x > 0.018f || traslation.x < -0.018f)
                 sprite.flipX = traslation.x < 0;
+
+            animator.SetBool("run", (Grounded && Mathf.Abs(traslation.x) > 0.0075f));
+            int vertical = 0;
+            if (!Grounded && Mathf.Abs(traslation.y) > 0.0075f)
+                vertical = Mathf.FloorToInt(Mathf.Sign(traslation.y));
+            animator.SetInteger("vertical", vertical);
         }
+
         if (Mathf.Abs(slopeAngle) < MAX_SLOPE_ANGLE)
         {
             //sprite.transform.eulerAngles = Vector3.Lerp(sprite.transform.eulerAngles, new Vector3(0f, 0f, targetAngle / 3.5f), Time.deltaTime * 10f);
