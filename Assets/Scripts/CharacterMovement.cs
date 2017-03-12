@@ -46,6 +46,7 @@ public class CharacterMovement : MonoBehaviour {
 
     // ATRIBUTES
     bool isPlayer = false;
+    bool isNPC = false;
     public bool isDead = false;
     // Physics
     Vector2 GRAVITY = new Vector2(0f, -19.81f);
@@ -78,7 +79,7 @@ public class CharacterMovement : MonoBehaviour {
     bool descendSlope = false;
     float jumpHoldTime = 0f;
     [SerializeField]
-    int run = 0;
+    public int run = 0;
 
     public float LateralBlock = 0;
 
@@ -89,8 +90,9 @@ public class CharacterMovement : MonoBehaviour {
 
         CalculateBounds();
         isPlayer = gameObject.layer == LayerMask.NameToLayer("Character");
+        isNPC = tag == "PlantCitizen";
 
-        if (isPlayer) {
+        if (isPlayer || isNPC) {
             if (!sprite)
             {
                 sprite = gameObject.GetComponentInChildren<SpriteRenderer>();
@@ -129,7 +131,7 @@ public class CharacterMovement : MonoBehaviour {
     {
         acceleration = Vector2.zero;
 
-        if (isPlayer)
+        if (isPlayer || isNPC)
         {
             
             if (tag == "PlantEntity")
@@ -242,7 +244,7 @@ public class CharacterMovement : MonoBehaviour {
             }
 
             // HOLD_JUMP
-            if (Input.GetKey(KeyCode.Space))
+            if (isPlayer && Input.GetKey(KeyCode.Space))
             {
                 if (jumpHoldTime < JUMP_HOLD_TIME)
                 {
@@ -478,7 +480,7 @@ public class CharacterMovement : MonoBehaviour {
     {
         Transform sloppedTransform = transform;
 
-        if (isPlayer)
+        if (isPlayer || isNPC)
         {
             sloppedTransform = sprite.transform;
             if (traslation.x > 0.018f || traslation.x < -0.018f)
