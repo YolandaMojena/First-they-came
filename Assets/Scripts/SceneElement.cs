@@ -51,6 +51,7 @@ public class SceneElement : MonoBehaviour {
         LevelManager.levelManager.MakeGold("Finite", false, transform.position, transform.rotation);
 
         threshold = spriteRenderer.material.GetFloat("_Threshold");
+
         while (threshold > 0)
         {   
             spriteRenderer.material.SetFloat("_Threshold", threshold - STEP);
