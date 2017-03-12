@@ -5,8 +5,15 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour {
 
+	public AudioSource[] sounds;
+	public AudioSource jump;
+	public AudioSource footsteps;
+
     // TO BE MANUALLY ASSIGNED IN EDITOR
-    public SpriteRenderer sprite;
+    [SerializeField]
+    SpriteRenderer sprite;
+    [SerializeField]
+    Animator animator;
 
     // CONSTANTS
     [SerializeField]
@@ -39,6 +46,7 @@ public class CharacterMovement : MonoBehaviour {
 
     // ATRIBUTES
     bool isPlayer = false;
+    public bool isDead = false;
     // Physics
     Vector2 GRAVITY = new Vector2(0f, -19.81f);
     const float HORIZONTAL_DRAG = 0.5f;
@@ -47,6 +55,8 @@ public class CharacterMovement : MonoBehaviour {
     public Vector2 traslation = Vector2.zero;
 
     public Vector2 externalVelocity = Vector2.zero;
+
+    Vector3 startPos;
 
     // Aux
     struct Bounds
@@ -74,7 +84,10 @@ public class CharacterMovement : MonoBehaviour {
 
     // METHODS
     void Start()
-    {CalculateBounds();
+    {
+        startPos = transform.position;
+
+        CalculateBounds();
         isPlayer = gameObject.layer == LayerMask.NameToLayer("Character");
 
         if (isPlayer) {
@@ -82,8 +95,13 @@ public class CharacterMovement : MonoBehaviour {
             {
                 sprite = gameObject.GetComponentInChildren<SpriteRenderer>();
             }
+            if (!animator)
+                animator = GetComponentInChildren<Animator>();
             //WIDTH = sprite.sprite.bounds.size.x;
             //HEIGHT = sprite.sprite.bounds.size.y;
+            sounds = GetComponents<AudioSource>();
+		    jump = sounds [0];
+		    footsteps = sounds [1];
         }
         else
         {
@@ -98,8 +116,7 @@ public class CharacterMovement : MonoBehaviour {
             horizontalRaySpacing = HEIGHT / (horizontalRayNum - 1);
         }
 
-
-        
+		
     }
 
     void Update()
@@ -131,7 +148,7 @@ public class CharacterMovement : MonoBehaviour {
         VerticalCollisions();
 
         ApplyPositionChange();
-        AdjustFacing();
+        AdjustSprite();
 
         externalVelocity = Vector2.zero;
     }
@@ -151,19 +168,34 @@ public class CharacterMovement : MonoBehaviour {
     void GatherInput()
     {
         run = 0;
-        if (Input.GetKey(KeyCode.D))
-            run += 1;
-        if (Input.GetKey(KeyCode.A))
-            run += -1;
+		if (Input.GetKey (KeyCode.D)) {
+			run += 1;
+		}
+		if (Input.GetKey (KeyCode.A)) {
+			run += -1;
+		}
 
-        if (Input.GetKeyDown(KeyCode.Space) && (Grounded || Physics2D.Raycast(transform.position, Vector3.down, 4 * SKIN_WIDTH, LayerMask.GetMask("Slope", "Wall", "Platform"))))
+        if (Input.GetKeyDown(KeyCode.Space) && (Grounded || Physics2D.Raycast(transform.position, Vector3.down, 4 * SKIN_WIDTH - traslation.y, LayerMask.GetMask("Slope", "Wall", "Platform"))))
         {
             //Debug.Log("Jump!");
             velocity.y = JUMP_FORCE;
             velocity.x *= JUMP_BOOST;
             jumpHoldTime = 0f;
             Grounded = false;
+			jump.Play (); 
         }
+
+		//FOOTSTEPS SOUND
+
+		if (Input.GetKeyDown (KeyCode.D) || Input.GetKeyDown(KeyCode.A) && Grounded)
+			footsteps.Play ();
+
+		if ((Input.GetKeyUp (KeyCode.D) || Input.GetKeyUp (KeyCode.A))) {
+			if(Input.GetKey(KeyCode.D) == false &&  (Input.GetKey(KeyCode.A) == false))
+				{
+					footsteps.Stop();
+				}
+		}
     }
 
     public void AddExternalVelocity(Vector2 vel)
@@ -233,6 +265,7 @@ public class CharacterMovement : MonoBehaviour {
                 //velocity = new Vector2(flower.Velocity.x, flower.Velocity.y);
                 //transform.position = new Vector3(transform.position.x, hit.point.y, transform.position.z);
                 transform.position += flower.Velocity;
+				footsteps.Stop ();
             }
         }
     }
@@ -319,13 +352,14 @@ public class CharacterMovement : MonoBehaviour {
                     LateralBlock = directionX;
                 }
                 objectToOrificate = null;
+
                 if (gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
+                else if (gameObject.tag == "PlantEntity" && hit.transform.tag == "Orificated")
+                    KillPlantEntity();
 
                 traslation.x = (hit.distance - SKIN_WIDTH) * directionX;
                 rayLength = hit.distance;
-
-                //hit.collider.gameObject.GetComponent<SceneElement>().TurnIntoGold();
             }
 
             Debug.DrawRay(rayOrigin, rayDirection, Color.red);
@@ -341,7 +375,12 @@ public class CharacterMovement : MonoBehaviour {
                 sceneElement = currentTransform.gameObject.GetComponent<SceneElement>();
             }
             if (sceneElement)
+            {
                 sceneElement.TurnIntoGold();
+                if (sceneElement.othersToOrificate != null)
+                    foreach (SceneElement s in sceneElement.othersToOrificate)
+                        s.TurnIntoGold();
+            }   
         }
     }
 
@@ -363,6 +402,8 @@ public class CharacterMovement : MonoBehaviour {
             {
                 if(gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
+                else if (gameObject.tag == "PlantEntity" && hit.transform.tag == "Orificated")
+                    KillPlantEntity();
 
                 traslation.y = (hit.distance - SKIN_WIDTH) * directionY;
 
@@ -382,6 +423,7 @@ public class CharacterMovement : MonoBehaviour {
                 someoneHit = true;
                 //grounded = true;
                 //}
+                climbSlope = false;
                 slopeAngle = Vector2.Angle(Vector2.up, hit.normal) * Mathf.Sign(hit.normal.x) * -1;
                 if (Mathf.Abs(slopeAngle) < MAX_SLOPE_ANGLE) { }
                     ClimbSlope();
@@ -411,8 +453,13 @@ public class CharacterMovement : MonoBehaviour {
                 currentTransform = currentTransform.parent;
                 sceneElement = currentTransform.gameObject.GetComponent<SceneElement>();
             }
-            if(sceneElement)
+            if (sceneElement)
+            {
                 sceneElement.TurnIntoGold();
+                if (sceneElement.othersToOrificate != null)
+                    foreach (SceneElement s in sceneElement.othersToOrificate)
+                        s.TurnIntoGold();
+            }
         }
     }
 
@@ -425,6 +472,7 @@ public class CharacterMovement : MonoBehaviour {
         traslation.x *= Mathf.Pow(Mathf.Abs(Mathf.Cos(slopeAngle * Mathf.Deg2Rad)), SLOPE_RUN_HANDICAP);
         traslation.y += traslation.x * Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * Mathf.Sign(traslation.x) * -1;
         Grounded = true;
+        climbSlope = true;
     }
 
 
@@ -434,24 +482,44 @@ public class CharacterMovement : MonoBehaviour {
         //velocity = translation / Time.deltaTime;
     }
 
-    void AdjustFacing()
+    void AdjustSprite()
     {
         Transform sloppedTransform = transform;
+
         if (isPlayer)
         {
             sloppedTransform = sprite.transform;
             if (traslation.x > 0.018f || traslation.x < -0.018f)
                 sprite.flipX = traslation.x < 0;
+
+            animator.SetBool("run", (Grounded && Mathf.Abs(traslation.x) > 0.0075f));
+            int vertical = 0;
+            if (!Grounded && Mathf.Abs(traslation.y) > 0.0075f)
+                vertical = Mathf.FloorToInt(Mathf.Sign(traslation.y));
+            animator.SetInteger("vertical", vertical);
         }
+
         if (Mathf.Abs(slopeAngle) < MAX_SLOPE_ANGLE)
         {
             //sprite.transform.eulerAngles = Vector3.Lerp(sprite.transform.eulerAngles, new Vector3(0f, 0f, targetAngle / 3.5f), Time.deltaTime * 10f);
             Quaternion currentRotation = sloppedTransform.transform.rotation;
-            sloppedTransform.transform.eulerAngles = new Vector3(sloppedTransform.transform.eulerAngles.x, sloppedTransform.transform.eulerAngles.y, slopeAngle / 3f);
+            sloppedTransform.transform.eulerAngles = new Vector3(sloppedTransform.transform.eulerAngles.x, sloppedTransform.transform.eulerAngles.y, slopeAngle / (isPlayer ? 3f : 1f));
             Quaternion targetRotation = sloppedTransform.transform.rotation;
             sloppedTransform.transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, Time.deltaTime * 10f);
-        }
+        }     
+    }
 
-        
+    void KillPlantEntity()
+    {
+        if (!isDead)
+        {
+            isDead = true;
+            foreach (GameObject g in GameObject.FindGameObjectsWithTag("Flower"))
+                GameObject.DestroyImmediate(g);
+
+            //transform.position = startPos;
+            LevelManager.levelManager.RespawnPlayer();
+            //Camera.main.GetComponent<CameraMovement>().ResetCamera();
+        }
     }
 }

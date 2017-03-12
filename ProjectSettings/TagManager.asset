@@ -9,6 +9,11 @@ TagManager:
   - PlantEntity
   - GoldEntity
   - Flower
+  - Killer
+  - ConvertGold
+  - ConvertGoldForever
+  - Grass
+  - Interruptor
   layers:
   - Default
   - TransparentFX

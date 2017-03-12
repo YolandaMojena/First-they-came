@@ -16,6 +16,7 @@ public class SceneElement : MonoBehaviour {
     [SerializeField]
     float STEP = 0.025f;
 
+    public SceneElement[] othersToOrificate;
     public bool Orificated = false;
 
 	// Use this for initialization
@@ -33,6 +34,8 @@ public class SceneElement : MonoBehaviour {
         {
             Orificated = true;
             gameObject.tag = "Orificated";
+            foreach (Transform t in transform)
+                t.tag = "Orificated";
             StartCoroutine("Orificate");
         }
     }
@@ -40,6 +43,9 @@ public class SceneElement : MonoBehaviour {
     // Coroutine which turns gradually into gold
     IEnumerator Orificate()
     {
+        // PARTICLES AND SOUNDS
+        LevelManager.levelManager.MakeGold("Finite", false, transform.position, transform.rotation);
+
         threshold = spriteRenderer.material.GetFloat("_Threshold");
         while (threshold > 0)
         {   

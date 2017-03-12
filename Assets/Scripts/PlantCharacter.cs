@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlantCharacter : MonoBehaviour {
 
+
 	// Use this for initialization
 	void Start () {
 
