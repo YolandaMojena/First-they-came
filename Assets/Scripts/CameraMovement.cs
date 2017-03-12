@@ -35,8 +35,8 @@ public class CameraMovement : MonoBehaviour {
         size = OrthographicBounds().size;
         initPos = transform.position;
         player = goldCharacter;
-        leftBound.transform.position = new Vector3(transform.position.x - size.x / 2, transform.position.y, transform.position.z);
-        topBound.transform.position = new Vector3(transform.position.x, transform.position.y - size.y / 2, transform.position.z);
+        if (leftBound != null) leftBound.transform.position = new Vector3(transform.position.x - size.x / 2, transform.position.y, transform.position.z);
+        if (topBound != null) topBound.transform.position = new Vector3(transform.position.x, transform.position.y - size.y / 2, transform.position.z);
     }
 
     void Update()
