@@ -13,6 +13,11 @@ public class CameraMovement : MonoBehaviour {
     [SerializeField]
     GameObject rightBound;
     [SerializeField]
+    GameObject topBound;
+    [SerializeField]
+    GameObject bottomBound;
+
+    [SerializeField]
     Vector3 offset;
     [SerializeField]
     float resetVel = 2;
@@ -30,7 +35,8 @@ public class CameraMovement : MonoBehaviour {
         size = OrthographicBounds().size;
         initPos = transform.position;
         player = goldCharacter;
-        leftBound.transform.position = new Vector3(transform.position.x - size.x / 2, transform.position.y, transform.position.z);
+        if (leftBound != null) leftBound.transform.position = new Vector3(transform.position.x - size.x / 2, transform.position.y, transform.position.z);
+        if (topBound != null) topBound.transform.position = new Vector3(transform.position.x, transform.position.y - size.y / 2, transform.position.z);
     }
 
     void Update()
@@ -53,13 +59,26 @@ public class CameraMovement : MonoBehaviour {
         {
             Vector3 targetPos = player.transform.position + offset;
 
+            if (topBound != null)
+            {
+                if (targetPos.y >= (topBound.transform.position.y + size.y / 2))
+                    targetPos.y = transform.position.y;
+            }
+
+            if (bottomBound != null)
+            {
+                if (targetPos.y - size.y / 2 <= (bottomBound.transform.position.y))
+                    targetPos.y = transform.position.y;
+            }
+
+
             if (targetPos.x <= (leftBound.transform.position.x + size.x / 2))
                 targetPos.x = transform.position.x;
 
             else if (targetPos.x >= (rightBound.transform.position.x - size.x / 2))
                 targetPos.x = transform.position.x;
 
-            transform.position = new Vector3(targetPos.x, transform.position.y, transform.position.z);
+            transform.position = new Vector3(targetPos.x, targetPos.y, transform.position.z);
         }         
     }
 

@@ -10,7 +10,10 @@ public class CharacterMovement : MonoBehaviour {
 	public AudioSource footsteps;
 
     // TO BE MANUALLY ASSIGNED IN EDITOR
-    public SpriteRenderer sprite;
+    [SerializeField]
+    SpriteRenderer sprite;
+    [SerializeField]
+    Animator animator;
 
     // CONSTANTS
     [SerializeField]
@@ -92,6 +95,8 @@ public class CharacterMovement : MonoBehaviour {
             {
                 sprite = gameObject.GetComponentInChildren<SpriteRenderer>();
             }
+            if (!animator)
+                animator = GetComponentInChildren<Animator>();
             //WIDTH = sprite.sprite.bounds.size.x;
             //HEIGHT = sprite.sprite.bounds.size.y;
         }
@@ -142,7 +147,7 @@ public class CharacterMovement : MonoBehaviour {
         VerticalCollisions();
 
         ApplyPositionChange();
-        AdjustFacing();
+        AdjustSprite();
 
         externalVelocity = Vector2.zero;
     }
@@ -169,7 +174,7 @@ public class CharacterMovement : MonoBehaviour {
 			run += -1;
 		}
 
-        if (Input.GetKeyDown(KeyCode.Space) && (Grounded || Physics2D.Raycast(transform.position, Vector3.down, 4 * SKIN_WIDTH, LayerMask.GetMask("Slope", "Wall", "Platform"))))
+        if (Input.GetKeyDown(KeyCode.Space) && (Grounded || Physics2D.Raycast(transform.position, Vector3.down, 4 * SKIN_WIDTH - traslation.y, LayerMask.GetMask("Slope", "Wall", "Platform"))))
         {
             //Debug.Log("Jump!");
             velocity.y = JUMP_FORCE;
@@ -349,7 +354,7 @@ public class CharacterMovement : MonoBehaviour {
 
                 if (gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
-                else if (gameObject.tag == "PlantEntity" && hit.collider.gameObject.tag != "Flower" && hit.collider.gameObject.transform.parent.tag == "Orificated")
+                else if (gameObject.tag == "PlantEntity" && hit.transform.tag == "Orificated")
                     KillPlantEntity();
 
                 traslation.x = (hit.distance - SKIN_WIDTH) * directionX;
@@ -396,7 +401,7 @@ public class CharacterMovement : MonoBehaviour {
             {
                 if(gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
-                else if (gameObject.tag == "PlantEntity" && hit.collider.gameObject.tag != "Flower" && hit.collider.gameObject.transform.parent.tag == "Orificated")
+                else if (gameObject.tag == "PlantEntity" && hit.transform.tag == "Orificated")
                     KillPlantEntity();
 
                 traslation.y = (hit.distance - SKIN_WIDTH) * directionY;
@@ -417,6 +422,7 @@ public class CharacterMovement : MonoBehaviour {
                 someoneHit = true;
                 //grounded = true;
                 //}
+                climbSlope = false;
                 slopeAngle = Vector2.Angle(Vector2.up, hit.normal) * Mathf.Sign(hit.normal.x) * -1;
                 if (Mathf.Abs(slopeAngle) < MAX_SLOPE_ANGLE) { }
                     ClimbSlope();
@@ -465,6 +471,7 @@ public class CharacterMovement : MonoBehaviour {
         traslation.x *= Mathf.Pow(Mathf.Abs(Mathf.Cos(slopeAngle * Mathf.Deg2Rad)), SLOPE_RUN_HANDICAP);
         traslation.y += traslation.x * Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * Mathf.Sign(traslation.x) * -1;
         Grounded = true;
+        climbSlope = true;
     }
 
 
@@ -474,15 +481,23 @@ public class CharacterMovement : MonoBehaviour {
         //velocity = translation / Time.deltaTime;
     }
 
-    void AdjustFacing()
+    void AdjustSprite()
     {
         Transform sloppedTransform = transform;
+
         if (isPlayer)
         {
             sloppedTransform = sprite.transform;
             if (traslation.x > 0.018f || traslation.x < -0.018f)
                 sprite.flipX = traslation.x < 0;
+
+            animator.SetBool("run", (Grounded && Mathf.Abs(traslation.x) > 0.0075f));
+            int vertical = 0;
+            if (!Grounded && Mathf.Abs(traslation.y) > 0.0075f)
+                vertical = Mathf.FloorToInt(Mathf.Sign(traslation.y));
+            animator.SetInteger("vertical", vertical);
         }
+
         if (Mathf.Abs(slopeAngle) < MAX_SLOPE_ANGLE)
         {
             //sprite.transform.eulerAngles = Vector3.Lerp(sprite.transform.eulerAngles, new Vector3(0f, 0f, targetAngle / 3.5f), Time.deltaTime * 10f);

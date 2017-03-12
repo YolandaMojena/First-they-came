@@ -11,7 +11,7 @@ public class Flower : MonoBehaviour {
     public Vector3 Velocity = Vector3.zero;
 
     //[SerializeField]
-    float DESIRED_SCALE = 0.12f;
+    float DESIRED_SCALE = 1f;
     //[SerializeField]
     float GROWTH_RATE = 1.2f;
     //[SerializeField]
@@ -21,7 +21,7 @@ public class Flower : MonoBehaviour {
     //[SerializeField]
     float SPEED = 1.25f;//0.75f;
 
-    float WIDTH;
+    //float WIDTH;
 
     Vector3 initialPos;
     LineRenderer stemRenderer;
@@ -33,7 +33,7 @@ public class Flower : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        WIDTH = GetComponent<BoxCollider2D>().size.x * transform.lossyScale.x;
+        //WIDTH = GetComponent<BoxCollider2D>().size.x * transform.lossyScale.x;
         initialPos = transform.position;
         stemRenderer = GetComponent<LineRenderer>();
         stemRenderer.SetPosition(0, transform.position);

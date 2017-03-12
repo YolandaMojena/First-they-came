@@ -47,7 +47,14 @@ public class LevelManager : MonoBehaviour {
     void Update()
     {
         if (goldCharacter.transform.position.x >= levelEnd.transform.position.x && goldCharacter.activeSelf)
-            StartCoroutine("WaitForReset");
+        {
+            if(SceneManager.GetActiveScene().buildIndex == 2)
+            {
+                //END GAME
+            }
+            else StartCoroutine("WaitForReset");
+        }
+           
 
         else if (plantCharacter.transform.position.x >= levelEnd.transform.position.x && goldCharacter.activeSelf)
             StartCoroutine("WaitForEnd");
