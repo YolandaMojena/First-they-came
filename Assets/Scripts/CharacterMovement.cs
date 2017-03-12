@@ -120,7 +120,7 @@ public class CharacterMovement : MonoBehaviour {
 
     void Update()
     {
-        if (isPlayer)
+        if (isPlayer && !isDead)
             GatherInput();
     }
 

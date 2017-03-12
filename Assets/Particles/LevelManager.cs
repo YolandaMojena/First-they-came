@@ -51,8 +51,9 @@ public class LevelManager : MonoBehaviour {
 			} else
 				StartCoroutine ("WaitForReset");
 		}
-		else if (plantCharacter.transform.position.x >= levelEnd.transform.position.x && goldCharacter.activeSelf)
+		else if (plantCharacter.transform.position.x >= levelEnd.transform.position.x && plantCharacter.activeSelf)
 			StartCoroutine ("WaitForEnd");
+
 		else if (plantCharacter.transform.position.x >= midCheckpoint.transform.position.x) {
 			currentCheckpoint = midCheckpoint;
 			Camera.main.GetComponent<CameraMovement> ().initPos = midCheckpoint.transform.position;
@@ -83,10 +84,11 @@ public class LevelManager : MonoBehaviour {
 		yield return new WaitForSeconds (checkpointDelay);
 		player.transform.position = currentCheckpoint.transform.position;
 		//player.SetActive(true);
-        player.GetComponent<CharacterMovement>().isDead = false;
+        
 		yield return new WaitForSeconds (0.5f);
 		Instantiate (checkpointParticle, player.transform.position, player.transform.rotation);
         Camera.main.GetComponent<CameraMovement>().ResetCamera();
+        player.GetComponent<CharacterMovement>().isDead = false;
 
     }
 
@@ -107,6 +109,6 @@ public class LevelManager : MonoBehaviour {
     {
         yield return new WaitForSecondsRealtime(1.5f);
         //HAY QUE CONFIGURAR LOS BUILD SETTINGS PARA LAS ESCENAS
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1, LoadSceneMode.Additive);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1, LoadSceneMode.Single);
     }
 }
