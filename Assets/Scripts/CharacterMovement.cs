@@ -328,11 +328,12 @@ public class CharacterMovement : MonoBehaviour {
         {
             Vector2 rayOrigin = ((Vector2)transform.position) + (directionX == -1 ? bounds.bottomLeft : bounds.bottomRight) + i * Vector2.up * horizontalRaySpacing;
             Vector2 rayDirection = Vector2.right * directionX;
-            LayerMask layerMask = isPlayer ? LayerMask.GetMask("Wall", "Pushable") : LayerMask.GetMask("Wall");
+            LayerMask layerMask = isPlayer ? (tag == "GoldEntity" ? LayerMask.GetMask("Wall", "Pushable", "GoldThrough") : LayerMask.GetMask("Wall", "Pushable")) : LayerMask.GetMask("Wall");
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, rayLength, layerMask);
 
             if (hit)
             {
+                // PUSHING
                 bool pushing = false;
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Pushable"))
                 {
@@ -347,20 +348,27 @@ public class CharacterMovement : MonoBehaviour {
                     }
                 }
                 
-                if(!pushing) // else
-                {
-                    velocity.x = 0f;
-                    LateralBlock = directionX;
-                }
+                // ORIFICATION
                 objectToOrificate = null;
 
                 if (gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
-                else if (gameObject.tag == "PlantEntity" && hit.transform.tag == "Orificated")
+                else if (gameObject.tag == "PlantEntity" && hit.transform.tag == "Orificated" && hit.collider.gameObject.layer != LayerMask.NameToLayer("GoldThrough"))
                     KillPlantEntity();
 
-                traslation.x = (hit.distance - SKIN_WIDTH) * directionX;
-                rayLength = hit.distance;
+
+                // PHYSICS
+                if (hit.collider.gameObject.layer != LayerMask.NameToLayer("GoldThrough"))
+                {
+                    if (!pushing) // else
+                    {
+                        velocity.x = 0f;
+                        LateralBlock = directionX;
+                    }
+
+                    traslation.x = (hit.distance - SKIN_WIDTH) * directionX;
+                    rayLength = hit.distance;
+                }
             }
 
             Debug.DrawRay(rayOrigin, rayDirection, Color.red);
@@ -381,6 +389,27 @@ public class CharacterMovement : MonoBehaviour {
                 if (sceneElement.othersToOrificate != null)
                     foreach (SceneElement s in sceneElement.othersToOrificate)
                         s.TurnIntoGold();
+                if(objectToOrificate.layer == LayerMask.NameToLayer("GoldThrough"))
+                {
+                    CharacterMovement chmov = objectToOrificate.GetComponent<CharacterMovement>();
+                    currentTransform = objectToOrificate.transform;
+                    while (!chmov && currentTransform.parent != null)
+                    {
+                        currentTransform = currentTransform.parent;
+                        chmov = currentTransform.GetComponent<CharacterMovement>();
+                    }
+                    if (chmov)
+                    {
+                        objectToOrificate.transform.rotation = chmov.sprite.transform.rotation;
+                        AICharacter aic = chmov.gameObject.GetComponent<AICharacter>();
+                        if (chmov.sprite.flipX)
+                            aic.GoldSpriteRenderer.sprite = aic.FlippedGoldSprite;
+                        chmov.sprite.sprite = aic.DefaultSprite;
+                        aic.enabled = false;
+                        chmov.sprite.GetComponent<Animator>().enabled = false;
+                        chmov.enabled = false;
+                    }
+                }
             }   
         }
     }
