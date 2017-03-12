@@ -25,8 +25,13 @@ public class SceneElementFinal : MonoBehaviour {
 	void Start () {
 		gameObject.tag = "Orificable";
 		spriteRenderer = GetComponent<SpriteRenderer>();
-		spriteMaterial = spriteRenderer.materials[0];
-		spriteRenderer.material.SetFloat("_Threshold", 1f);
+
+        if (spriteRenderer)
+        {
+            spriteMaterial = spriteRenderer.materials[0];
+            spriteRenderer.material.SetFloat("_Threshold", 1f);
+        }
+
 		pos = transform.position;	
 	}
 
@@ -38,7 +43,7 @@ public class SceneElementFinal : MonoBehaviour {
 			gameObject.tag = "Orificated";
 			foreach (Transform t in transform)
 				t.tag = "Orificated";
-			StartCoroutine("Orificate");
+			if(spriteRenderer) StartCoroutine("Orificate");
 			foreach (GameObject particle in particlesToActivate)
 				particle.SetActive (true);
 		}

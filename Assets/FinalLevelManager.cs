@@ -42,10 +42,10 @@ public class FinalLevelManager : MonoBehaviour {
 
 	void Update()
 	{
-		if (goldCharacter.transform.position.x >= levelEnd.transform.position.x) {
+		if (goldCharacter.transform.position.x >= levelEnd.transform.position.x && goldCharacter.activeSelf) {
 			StartCoroutine ("WaitForResetFinal");
 		}
-		if(plantCharacter.transform.position.x >= 39){
+		if(plantCharacter.transform.position.x >= 39 && plantCharacter.activeSelf){
 			StartCoroutine ("FinalOfTheGame");
 		}
 	}
@@ -99,8 +99,9 @@ public class FinalLevelManager : MonoBehaviour {
 		yield return new WaitForSecondsRealtime(1.5f);
 		plantCharacter.SetActive(true);
 		Camera.main.GetComponent<CameraMovement>().ResetCamera();
-		goldCharacter.GetComponent<CharacterMovementFinal> ().enabled = false;
-		FinalLevelManager.levelManager.player = plantCharacter;
+        goldCharacter.SetActive(false);
+		//goldCharacter.GetComponent<CharacterMovementFinal> ().enabled = false;
+		player = plantCharacter;
 	}
 
 	IEnumerator FinalOfTheGame()
