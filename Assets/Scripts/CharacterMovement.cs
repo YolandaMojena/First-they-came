@@ -75,7 +75,6 @@ public class CharacterMovement : MonoBehaviour {
     float jumpHoldTime = 0f;
     [SerializeField]
     int run = 0;
-    bool jump = false;
 
     public float LateralBlock = 0;
 
@@ -168,7 +167,7 @@ public class CharacterMovement : MonoBehaviour {
         if (Input.GetKey(KeyCode.A))
             run += -1;
 
-        if (Input.GetKeyDown(KeyCode.Space) && (Grounded || Physics2D.Raycast(transform.position, Vector3.down, 4 * SKIN_WIDTH, LayerMask.GetMask("Slope", "Wall", "Platform"))))
+        if (Input.GetKeyDown(KeyCode.Space) && (Grounded || Physics2D.Raycast(transform.position, Vector3.down, 4 * SKIN_WIDTH - traslation.y, LayerMask.GetMask("Slope", "Wall", "Platform"))))
         {
             //Debug.Log("Jump!");
             velocity.y = JUMP_FORCE;
@@ -334,7 +333,7 @@ public class CharacterMovement : MonoBehaviour {
 
                 if (gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
-                else if (gameObject.tag == "PlantEntity" && hit.collider.gameObject.tag != "Flower" && hit.collider.gameObject.transform.parent.tag == "Orificated")
+                else if (gameObject.tag == "PlantEntity" && hit.transform.tag == "Orificated")
                     KillPlantEntity();
 
                 traslation.x = (hit.distance - SKIN_WIDTH) * directionX;
@@ -381,7 +380,7 @@ public class CharacterMovement : MonoBehaviour {
             {
                 if(gameObject.tag == "GoldEntity" && hit.collider.gameObject.tag == "Orificable")
                     objectToOrificate = hit.collider.gameObject;
-                else if (gameObject.tag == "PlantEntity" && hit.collider.gameObject.tag != "Flower" && hit.collider.gameObject.transform.parent.tag == "Orificated")
+                else if (gameObject.tag == "PlantEntity" && hit.transform.tag == "Orificated")
                     KillPlantEntity();
 
                 traslation.y = (hit.distance - SKIN_WIDTH) * directionY;
@@ -402,6 +401,7 @@ public class CharacterMovement : MonoBehaviour {
                 someoneHit = true;
                 //grounded = true;
                 //}
+                climbSlope = false;
                 slopeAngle = Vector2.Angle(Vector2.up, hit.normal) * Mathf.Sign(hit.normal.x) * -1;
                 if (Mathf.Abs(slopeAngle) < MAX_SLOPE_ANGLE) { }
                     ClimbSlope();
@@ -450,6 +450,7 @@ public class CharacterMovement : MonoBehaviour {
         traslation.x *= Mathf.Pow(Mathf.Abs(Mathf.Cos(slopeAngle * Mathf.Deg2Rad)), SLOPE_RUN_HANDICAP);
         traslation.y += traslation.x * Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * Mathf.Sign(traslation.x) * -1;
         Grounded = true;
+        climbSlope = true;
     }
 
 
