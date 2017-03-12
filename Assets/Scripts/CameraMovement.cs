@@ -14,6 +14,8 @@ public class CameraMovement : MonoBehaviour {
     GameObject rightBound;
     [SerializeField]
     GameObject topBound;
+    [SerializeField]
+    GameObject bottomBound;
 
     [SerializeField]
     Vector3 offset;
@@ -57,9 +59,18 @@ public class CameraMovement : MonoBehaviour {
         {
             Vector3 targetPos = player.transform.position + offset;
 
+            if (topBound != null)
+            {
+                if (targetPos.y >= (topBound.transform.position.y + size.y / 2))
+                    targetPos.y = transform.position.y;
+            }
 
-            if (targetPos.y >= (topBound.transform.position.y + size.y / 2))
-                targetPos.y = transform.position.y;
+            if (bottomBound != null)
+            {
+                if (targetPos.y - size.y / 2 <= (bottomBound.transform.position.y))
+                    targetPos.y = transform.position.y;
+            }
+
 
             if (targetPos.x <= (leftBound.transform.position.x + size.x / 2))
                 targetPos.x = transform.position.x;
