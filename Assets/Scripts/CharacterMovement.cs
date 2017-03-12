@@ -141,8 +141,7 @@ public class CharacterMovement : MonoBehaviour {
         CalculateDynamics();
 
         descendSlope = false;
-        if (velocity.y <= 0)
-            DescendSlope();
+        //DescendSlope();
         if(velocity.x != 0 || externalVelocity.x != 0)
             HorizontalCollisions();
         VerticalCollisions();
@@ -392,7 +391,7 @@ public class CharacterMovement : MonoBehaviour {
         float directionX = Mathf.Sign(velocity.x);
         if (directionY == 1)
             return;
-        float rayLength = Mathf.Abs(traslation.y) + SKIN_WIDTH;
+        float rayLength = Mathf.Abs(traslation.y) + SKIN_WIDTH + 0.1f;
         for (int i = 0; i < verticalRayNum; i++)
         {
             Vector2 rayOrigin = ((Vector2)transform.position) + (directionX == 1 ? bounds.bottomLeft + rayMargins/2f : bounds.bottomRight - rayMargins / 2f) + i * Vector2.right * directionX * verticalRaySpacing;
@@ -407,34 +406,27 @@ public class CharacterMovement : MonoBehaviour {
 
                 traslation.y = (hit.distance - SKIN_WIDTH) * directionY;
 
-                //float angle = Vector2.Angle(Vector2.up, hit.normal) * Mathf.Sign(hit.normal.x);
-                //if (Mathf.Abs(angle) > 90f+30f)
-                //    continue;
-
                 rayLength = hit.distance;
-                //if (directionY == -1)
-                //{
-                if (!Grounded)
-                {
-                    if(hit.collider.tag != "Flower")
-                        velocity.y = -0.1f;
-                    acceleration.y = 0f;
-                }
+                
+                if(hit.collider.tag != "Flower")
+                    velocity.y = -0.5f;
+                acceleration.y = 0f;
+                //}
                 someoneHit = true;
-                //grounded = true;
+                //Grounded = true;
                 //}
                 climbSlope = false;
                 slopeAngle = Vector2.Angle(Vector2.up, hit.normal) * Mathf.Sign(hit.normal.x) * -1;
-                if (Mathf.Abs(slopeAngle) < MAX_SLOPE_ANGLE) { }
+                //if (Mathf.Abs(slopeAngle) < MAX_SLOPE_ANGLE)
                     ClimbSlope();
             }
             else
             {
-                if (!descendSlope)
-                {
+                //if (!descendSlope)
+                //{
                     Grounded = false;
                     slopeAngle = 0f;
-                }
+                //}
             }
             Grounded = someoneHit;
             if (Grounded)
