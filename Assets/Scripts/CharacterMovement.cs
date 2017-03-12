@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour {
 
+	public AudioSource[] sounds;
+	public AudioSource jump;
+	public AudioSource footsteps;
+
     // TO BE MANUALLY ASSIGNED IN EDITOR
     [SerializeField]
     SpriteRenderer sprite;
@@ -109,8 +113,9 @@ public class CharacterMovement : MonoBehaviour {
             horizontalRaySpacing = HEIGHT / (horizontalRayNum - 1);
         }
 
-
-        
+		sounds = GetComponents<AudioSource>();
+		jump = sounds [0];
+		footsteps = sounds [1];
     }
 
     void Update()
@@ -162,10 +167,12 @@ public class CharacterMovement : MonoBehaviour {
     void GatherInput()
     {
         run = 0;
-        if (Input.GetKey(KeyCode.D))
-            run += 1;
-        if (Input.GetKey(KeyCode.A))
-            run += -1;
+		if (Input.GetKey (KeyCode.D)) {
+			run += 1;
+		}
+		if (Input.GetKey (KeyCode.A)) {
+			run += -1;
+		}
 
         if (Input.GetKeyDown(KeyCode.Space) && (Grounded || Physics2D.Raycast(transform.position, Vector3.down, 4 * SKIN_WIDTH - traslation.y, LayerMask.GetMask("Slope", "Wall", "Platform"))))
         {
@@ -174,7 +181,20 @@ public class CharacterMovement : MonoBehaviour {
             velocity.x *= JUMP_BOOST;
             jumpHoldTime = 0f;
             Grounded = false;
+			jump.Play (); 
         }
+
+		//FOOTSTEPS SOUND
+
+		if (Input.GetKeyDown (KeyCode.D) || Input.GetKeyDown(KeyCode.A) && Grounded)
+			footsteps.Play ();
+
+		if ((Input.GetKeyUp (KeyCode.D) || Input.GetKeyUp (KeyCode.A))) {
+			if(Input.GetKey(KeyCode.D) == false &&  (Input.GetKey(KeyCode.A) == false))
+				{
+					footsteps.Stop();
+				}
+		}
     }
 
     public void AddExternalVelocity(Vector2 vel)
@@ -244,6 +264,7 @@ public class CharacterMovement : MonoBehaviour {
                 //velocity = new Vector2(flower.Velocity.x, flower.Velocity.y);
                 //transform.position = new Vector3(transform.position.x, hit.point.y, transform.position.z);
                 transform.position += flower.Velocity;
+				footsteps.Stop ();
             }
         }
     }
