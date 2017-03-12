@@ -23,7 +23,7 @@ public class CameraMovement : MonoBehaviour {
     float resetVel = 2;
 
     Vector3 size;
-    Vector3 initPos;
+    public Vector3 initPos;
     GameObject player;
 
 
@@ -36,7 +36,7 @@ public class CameraMovement : MonoBehaviour {
         initPos = transform.position;
         player = goldCharacter;
         if (leftBound != null) leftBound.transform.position = new Vector3(transform.position.x - size.x / 2, transform.position.y, transform.position.z);
-        if (topBound != null) topBound.transform.position = new Vector3(transform.position.x, transform.position.y - size.y / 2, transform.position.z);
+        //if (topBound != null) topBound.transform.position = new Vector3(transform.position.x, transform.position.y - size.y / 2, transform.position.z);
     }
 
     void Update()
@@ -44,7 +44,7 @@ public class CameraMovement : MonoBehaviour {
         if (reset)
         {
             transform.position = Vector3.Lerp(transform.position, initPos, Time.deltaTime * resetVel);
-            if (Mathf.Abs(transform.position.x - initPos.x) <= 0.1f)
+            if (Mathf.Abs(transform.position.x - initPos.x) <= 0.1f && Mathf.Abs(transform.position.y - initPos.y) <= 0.1f)
             {
                 reset = false;
                 player.SetActive(true);
@@ -61,13 +61,13 @@ public class CameraMovement : MonoBehaviour {
 
             if (topBound != null)
             {
-                if (targetPos.y >= (topBound.transform.position.y + size.y / 2))
+                if (targetPos.y >= (topBound.transform.position.y - size.y / 2))
                     targetPos.y = transform.position.y;
             }
 
             if (bottomBound != null)
             {
-                if (targetPos.y - size.y / 2 <= (bottomBound.transform.position.y))
+                if (targetPos.y <= (bottomBound.transform.position.y + size.y / 2))
                     targetPos.y = transform.position.y;
             }
 

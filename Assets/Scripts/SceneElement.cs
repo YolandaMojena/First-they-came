@@ -19,6 +19,8 @@ public class SceneElement : MonoBehaviour {
     public SceneElement[] othersToOrificate;
     public bool Orificated = false;
 
+	public GameObject[] particlesToActivate;
+
 	// Use this for initialization
 	void Start () {
         gameObject.tag = "Orificable";
@@ -37,6 +39,8 @@ public class SceneElement : MonoBehaviour {
             foreach (Transform t in transform)
                 t.tag = "Orificated";
             StartCoroutine("Orificate");
+			foreach (GameObject particle in particlesToActivate)
+				particle.SetActive (true);
         }
     }
 
@@ -47,6 +51,7 @@ public class SceneElement : MonoBehaviour {
         LevelManager.levelManager.MakeGold("Finite", false, transform.position, transform.rotation);
 
         threshold = spriteRenderer.material.GetFloat("_Threshold");
+
         while (threshold > 0)
         {   
             spriteRenderer.material.SetFloat("_Threshold", threshold - STEP);
