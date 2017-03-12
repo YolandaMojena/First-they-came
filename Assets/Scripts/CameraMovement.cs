@@ -92,7 +92,6 @@ public class CameraMovement : MonoBehaviour {
     }
 
     public void ResetCamera() {
-
         reset = true;
         player = plantCharacter;
     }

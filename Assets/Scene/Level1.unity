@@ -258,7 +258,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &25491267
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1031,6 +1031,7 @@ MonoBehaviour:
   goldCharacter: {fileID: 1976827481}
   plantCharacter: {fileID: 526690544}
   levelEnd: {fileID: 1074479957}
+  finalTrigger: {fileID: 0}
 --- !u!4 &243139492
 Transform:
   m_ObjectHideFlags: 0
@@ -1392,7 +1393,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &321096012
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1494,7 +1495,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &343369487
 Transform:
   m_ObjectHideFlags: 0
@@ -4246,7 +4247,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1221252109
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5103,7 +5104,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1336837543
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6258,7 +6259,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1664540509
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6630,7 +6631,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1739232525
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6906,7 +6907,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1792438075
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7560,7 +7561,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1961030259
 RectTransform:
   m_ObjectHideFlags: 0

@@ -516,4 +516,15 @@ public class CharacterMovement : MonoBehaviour {
             //Camera.main.GetComponent<CameraMovement>().ResetCamera();
         }
     }
+
+	void KillPlantEntityForever()
+	{
+		if (!isDead) {
+			isDead = true;
+		}
+		foreach (GameObject g in GameObject.FindGameObjectsWithTag("Flower"))
+			GameObject.DestroyImmediate(g);
+
+		//CINEMÁTICA FINAL
+	}
 }

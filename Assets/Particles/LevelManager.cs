@@ -48,16 +48,22 @@ public class LevelManager : MonoBehaviour {
 
     void Update()
     {
-		if (goldCharacter.transform.position.x >= levelEnd.transform.position.x && goldCharacter.activeSelf) {
+		if (SceneManager.GetActiveScene ().buildIndex == 2) {
+			if (goldCharacter.transform.position.x >= levelEnd.transform.position.x && goldCharacter.activeSelf)
 				StartCoroutine ("WaitForReset");
-		}
-		else if (plantCharacter.transform.position.x >= levelEnd.transform.position.x && plantCharacter.activeSelf)
-            if (SceneManager.GetActiveScene().buildIndex == 2)
+			else if (plantCharacter.transform.position.x >= 40 && plantCharacter.activeSelf) {
+				StartCoroutine ("FinalOfTheGame");
+			}
+		}else if (goldCharacter.transform.position.x >= levelEnd.transform.position.x && goldCharacter.activeSelf) {
+				StartCoroutine ("WaitForReset");
+		}else if (plantCharacter.transform.position.x >= levelEnd.transform.position.x && plantCharacter.activeSelf)
+			StartCoroutine("WaitForEnd");
+            /*if (SceneManager.GetActiveScene().buildIndex == 2)
             {
                 //PREPARE END GAME (Script FinalLevelManager)
                 StartCoroutine("FinalOfTheGame");
             }
-            else StartCoroutine("WaitForEnd");
+            else*/
 
 		/*else if (plantCharacter.transform.position.x >= midCheckpoint.transform.position.x) {
 			currentCheckpoint = midCheckpoint;
@@ -65,6 +71,7 @@ public class LevelManager : MonoBehaviour {
 		}*/
 
     }
+
 
     public void MakeGold(string typeParticle, bool isAlreadyGold, Vector3 position, Quaternion rotation){
 		if (!isAlreadyGold) {
@@ -117,21 +124,25 @@ public class LevelManager : MonoBehaviour {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1, LoadSceneMode.Single);
     }
 
+
+
     IEnumerator FinalOfTheGame()
     {
         //player.GetComponent<CharacterMovementFinal>().enabled = false;
         Camera.main.GetComponentInChildren<AudioSource>().Play();
-        finalTrigger.gameObject.SetActive(true);
-        finalTrigger.TurnIntoGold();
+        //finalTrigger.gameObject.SetActive(true);
 
         Instantiate(deathParticle, player.GetComponentInChildren<SpriteRenderer>().bounds.center, player.transform.rotation);
-        player.SetActive(false);
+        
+		player.SetActive(false);
 
-        //Orificar suelo y árboles, crear más partículas
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(3f);
+
+		this.GetComponent<PoemCredits> ().poem1Time = true;
 
         //fundido en negro
         //poema
         //créditos
+
     }
 }
