@@ -46,6 +46,7 @@ public class CharacterMovement : MonoBehaviour {
 
     // ATRIBUTES
     bool isPlayer = false;
+    bool isNPC = false;
     public bool isDead = false;
     // Physics
     Vector2 GRAVITY = new Vector2(0f, -19.81f);
@@ -78,7 +79,7 @@ public class CharacterMovement : MonoBehaviour {
     bool descendSlope = false;
     float jumpHoldTime = 0f;
     [SerializeField]
-    int run = 0;
+    public int run = 0;
 
     public float LateralBlock = 0;
 
@@ -89,8 +90,9 @@ public class CharacterMovement : MonoBehaviour {
 
         CalculateBounds();
         isPlayer = gameObject.layer == LayerMask.NameToLayer("Character");
+        isNPC = tag == "PlantCitizen";
 
-        if (isPlayer) {
+        if (isPlayer || isNPC) {
             if (!sprite)
             {
                 sprite = gameObject.GetComponentInChildren<SpriteRenderer>();
@@ -129,7 +131,7 @@ public class CharacterMovement : MonoBehaviour {
     {
         acceleration = Vector2.zero;
 
-        if (isPlayer)
+        if (isPlayer || isNPC)
         {
             
             if (tag == "PlantEntity")
@@ -141,8 +143,7 @@ public class CharacterMovement : MonoBehaviour {
         CalculateDynamics();
 
         descendSlope = false;
-        if (velocity.y <= 0)
-            DescendSlope();
+        //DescendSlope();
         if(velocity.x != 0 || externalVelocity.x != 0)
             HorizontalCollisions();
         VerticalCollisions();
@@ -243,7 +244,7 @@ public class CharacterMovement : MonoBehaviour {
             }
 
             // HOLD_JUMP
-            if (Input.GetKey(KeyCode.Space))
+            if (isPlayer && Input.GetKey(KeyCode.Space))
             {
                 if (jumpHoldTime < JUMP_HOLD_TIME)
                 {
@@ -392,7 +393,7 @@ public class CharacterMovement : MonoBehaviour {
         float directionX = Mathf.Sign(velocity.x);
         if (directionY == 1)
             return;
-        float rayLength = Mathf.Abs(traslation.y) + SKIN_WIDTH;
+        float rayLength = Mathf.Abs(traslation.y) + SKIN_WIDTH + 0.1f;
         for (int i = 0; i < verticalRayNum; i++)
         {
             Vector2 rayOrigin = ((Vector2)transform.position) + (directionX == 1 ? bounds.bottomLeft + rayMargins/2f : bounds.bottomRight - rayMargins / 2f) + i * Vector2.right * directionX * verticalRaySpacing;
@@ -407,34 +408,27 @@ public class CharacterMovement : MonoBehaviour {
 
                 traslation.y = (hit.distance - SKIN_WIDTH) * directionY;
 
-                //float angle = Vector2.Angle(Vector2.up, hit.normal) * Mathf.Sign(hit.normal.x);
-                //if (Mathf.Abs(angle) > 90f+30f)
-                //    continue;
-
                 rayLength = hit.distance;
-                //if (directionY == -1)
-                //{
-                if (!Grounded)
-                {
-                    if(hit.collider.tag != "Flower")
-                        velocity.y = -0.1f;
-                    acceleration.y = 0f;
-                }
+                
+                if(hit.collider.tag != "Flower")
+                    velocity.y = -0.5f;
+                acceleration.y = 0f;
+                //}
                 someoneHit = true;
-                //grounded = true;
+                //Grounded = true;
                 //}
                 climbSlope = false;
                 slopeAngle = Vector2.Angle(Vector2.up, hit.normal) * Mathf.Sign(hit.normal.x) * -1;
-                if (Mathf.Abs(slopeAngle) < MAX_SLOPE_ANGLE) { }
+                //if (Mathf.Abs(slopeAngle) < MAX_SLOPE_ANGLE)
                     ClimbSlope();
             }
             else
             {
-                if (!descendSlope)
-                {
+                //if (!descendSlope)
+                //{
                     Grounded = false;
                     slopeAngle = 0f;
-                }
+                //}
             }
             Grounded = someoneHit;
             if (Grounded)
@@ -486,7 +480,7 @@ public class CharacterMovement : MonoBehaviour {
     {
         Transform sloppedTransform = transform;
 
-        if (isPlayer)
+        if (isPlayer || isNPC)
         {
             sloppedTransform = sprite.transform;
             if (traslation.x > 0.018f || traslation.x < -0.018f)
