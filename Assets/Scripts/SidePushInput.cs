@@ -13,7 +13,7 @@ public class SidePushInput : MonoBehaviour {
         Transform current = transform;
         while (!Controller)
         {
-            current = transform.parent;
+            current = current.parent;
             Controller = current.gameObject.GetComponent<CharacterMovement>();
         }
 	}

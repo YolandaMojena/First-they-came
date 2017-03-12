@@ -99,6 +99,9 @@ public class CharacterMovement : MonoBehaviour {
                 animator = GetComponentInChildren<Animator>();
             //WIDTH = sprite.sprite.bounds.size.x;
             //HEIGHT = sprite.sprite.bounds.size.y;
+            sounds = GetComponents<AudioSource>();
+		    jump = sounds [0];
+		    footsteps = sounds [1];
         }
         else
         {
@@ -113,9 +116,7 @@ public class CharacterMovement : MonoBehaviour {
             horizontalRaySpacing = HEIGHT / (horizontalRayNum - 1);
         }
 
-		sounds = GetComponents<AudioSource>();
-		jump = sounds [0];
-		footsteps = sounds [1];
+		
     }
 
     void Update()
@@ -502,7 +503,7 @@ public class CharacterMovement : MonoBehaviour {
         {
             //sprite.transform.eulerAngles = Vector3.Lerp(sprite.transform.eulerAngles, new Vector3(0f, 0f, targetAngle / 3.5f), Time.deltaTime * 10f);
             Quaternion currentRotation = sloppedTransform.transform.rotation;
-            sloppedTransform.transform.eulerAngles = new Vector3(sloppedTransform.transform.eulerAngles.x, sloppedTransform.transform.eulerAngles.y, slopeAngle / 3f);
+            sloppedTransform.transform.eulerAngles = new Vector3(sloppedTransform.transform.eulerAngles.x, sloppedTransform.transform.eulerAngles.y, slopeAngle / (isPlayer ? 3f : 1f));
             Quaternion targetRotation = sloppedTransform.transform.rotation;
             sloppedTransform.transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, Time.deltaTime * 10f);
         }     
