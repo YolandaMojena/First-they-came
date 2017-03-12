@@ -9,6 +9,8 @@ public class LevelManager : MonoBehaviour {
 
 	public GameObject currentCheckpoint;
 
+	public GameObject midCheckpoint;
+
 	public GameObject player;
 
 	public GameObject goldParticle; // PJ_1 orifica
@@ -23,9 +25,6 @@ public class LevelManager : MonoBehaviour {
 	public float checkpointDelay; // The time between death and re-generation
 
 	public GameObject plantParticle; // PJ_2 plants a flower
-
-	public GameObject grassParticle; // PJ_2 is on grass
-	public float grassDelay; // The time between in_grass particles generation
 
     [SerializeField]
     GameObject goldCharacter;
@@ -46,18 +45,19 @@ public class LevelManager : MonoBehaviour {
 
     void Update()
     {
-        if (goldCharacter.transform.position.x >= levelEnd.transform.position.x && goldCharacter.activeSelf)
-        {
-            if(SceneManager.GetActiveScene().buildIndex == 2)
-            {
-                //END GAME
-            }
-            else StartCoroutine("WaitForReset");
-        }
-           
+		if (goldCharacter.transform.position.x >= levelEnd.transform.position.x && goldCharacter.activeSelf) {
+			if (SceneManager.GetActiveScene ().buildIndex == 2) {
+				//PREPARE END GAME (Script FinalLevelManager)
+			} else
+				StartCoroutine ("WaitForReset");
+		}
+		else if (plantCharacter.transform.position.x >= levelEnd.transform.position.x && goldCharacter.activeSelf)
+			StartCoroutine ("WaitForEnd");
+		else if (plantCharacter.transform.position.x >= midCheckpoint.transform.position.x) {
+			currentCheckpoint = midCheckpoint;
+			Camera.main.GetComponent<CameraMovement> ().initPos = midCheckpoint.transform.position;
+		}
 
-        else if (plantCharacter.transform.position.x >= levelEnd.transform.position.x && goldCharacter.activeSelf)
-            StartCoroutine("WaitForEnd");
     }
 
     public void MakeGold(string typeParticle, bool isAlreadyGold, Vector3 position, Quaternion rotation){

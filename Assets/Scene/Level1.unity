@@ -884,6 +884,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentCheckpoint: {fileID: 346056159}
+  midCheckpoint: {fileID: 582168702}
   player: {fileID: 0}
   goldParticle: {fileID: 1215713525956086, guid: e7a5b463edd884c22833ebe5986fe92c,
     type: 2}
@@ -1294,6 +1295,7 @@ MonoBehaviour:
   STEP: 0.025
   othersToOrificate: []
   Orificated: 0
+  particlesToActivate: []
 --- !u!61 &356813398
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1811,6 +1813,34 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.9, y: 0.33}
+--- !u!1 &582168702
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 582168703}
+  m_Layer: 0
+  m_Name: MidCheckPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &582168703
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 582168702}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.29, y: -5.05, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &626106489
 GameObject:
   m_ObjectHideFlags: 0
@@ -2925,7 +2955,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: 1.57, y: 5.8}
+  m_Size: {x: 5.59, y: 5.8}
 --- !u!4 &1074479960
 Transform:
   m_ObjectHideFlags: 0
@@ -2933,7 +2963,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1074479957}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 35.93, y: 5.79, z: 0}
+  m_LocalPosition: {x: 33.9, y: 5.79, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3033,6 +3063,7 @@ MonoBehaviour:
   STEP: 0.025
   othersToOrificate: []
   Orificated: 0
+  particlesToActivate: []
 --- !u!1 &1102501802
 GameObject:
   m_ObjectHideFlags: 0
@@ -3979,6 +4010,7 @@ MonoBehaviour:
   STEP: 0.025
   othersToOrificate: []
   Orificated: 0
+  particlesToActivate: []
 --- !u!1 &1262908404
 GameObject:
   m_ObjectHideFlags: 0
@@ -4386,6 +4418,7 @@ MonoBehaviour:
   STEP: 0.025
   othersToOrificate: []
   Orificated: 0
+  particlesToActivate: []
 --- !u!1 &1455330365
 GameObject:
   m_ObjectHideFlags: 0
@@ -4789,6 +4822,7 @@ MonoBehaviour:
   STEP: 0.025
   othersToOrificate: []
   Orificated: 0
+  particlesToActivate: []
 --- !u!1 &1539848754
 GameObject:
   m_ObjectHideFlags: 0
@@ -5026,6 +5060,7 @@ MonoBehaviour:
   STEP: 0.025
   othersToOrificate: []
   Orificated: 0
+  particlesToActivate: []
 --- !u!1 &1623018610
 GameObject:
   m_ObjectHideFlags: 0
@@ -5306,6 +5341,7 @@ MonoBehaviour:
   STEP: 0.025
   othersToOrificate: []
   Orificated: 0
+  particlesToActivate: []
 --- !u!1 &1664540508
 GameObject:
   m_ObjectHideFlags: 0
@@ -5590,6 +5626,7 @@ MonoBehaviour:
   STEP: 0.025
   othersToOrificate: []
   Orificated: 0
+  particlesToActivate: []
 --- !u!1 &1719533800
 GameObject:
   m_ObjectHideFlags: 0
@@ -6066,7 +6103,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1876362475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6141,7 +6178,7 @@ RectTransform:
   - {fileID: 1961030259}
   - {fileID: 25491267}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -6342,6 +6379,7 @@ MonoBehaviour:
   STEP: 0.025
   othersToOrificate: []
   Orificated: 0
+  particlesToActivate: []
 --- !u!61 &1929213868
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6756,6 +6794,7 @@ MonoBehaviour:
   STEP: 0.025
   othersToOrificate: []
   Orificated: 0
+  particlesToActivate: []
 --- !u!1 &2114655043
 GameObject:
   m_ObjectHideFlags: 0
@@ -6792,8 +6831,11 @@ MonoBehaviour:
   plantCharacter: {fileID: 526690544}
   leftBound: {fileID: 167253921}
   rightBound: {fileID: 1629340201}
+  topBound: {fileID: 0}
+  bottomBound: {fileID: 0}
   offset: {x: 2, y: 0, z: 0}
   resetVel: 2
+  initPos: {x: 0, y: 0, z: 0}
 --- !u!81 &2114655045
 AudioListener:
   m_ObjectHideFlags: 0
@@ -7005,6 +7047,7 @@ MonoBehaviour:
   STEP: 0.025
   othersToOrificate: []
   Orificated: 0
+  particlesToActivate: []
 --- !u!1 &2128692017
 GameObject:
   m_ObjectHideFlags: 0

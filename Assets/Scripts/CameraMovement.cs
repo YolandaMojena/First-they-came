@@ -23,7 +23,7 @@ public class CameraMovement : MonoBehaviour {
     float resetVel = 2;
 
     Vector3 size;
-    Vector3 initPos;
+    public Vector3 initPos;
     GameObject player;
 
 
