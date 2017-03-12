@@ -34,6 +34,8 @@ public class SceneElement : MonoBehaviour {
         {
             Orificated = true;
             gameObject.tag = "Orificated";
+            foreach (Transform t in transform)
+                t.tag = "Orificated";
             StartCoroutine("Orificate");
         }
     }
