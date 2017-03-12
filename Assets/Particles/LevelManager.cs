@@ -85,8 +85,9 @@ public class LevelManager : MonoBehaviour {
 		//player.SetActive(true);
         player.GetComponent<CharacterMovement>().isDead = false;
 		yield return new WaitForSeconds (0.5f);
-		//Instantiate (checkpointParticle, player.transform.position, player.transform.rotation);
+		Instantiate (checkpointParticle, player.transform.position, player.transform.rotation);
         Camera.main.GetComponent<CameraMovement>().ResetCamera();
+
     }
 
 	public void Plant(){
