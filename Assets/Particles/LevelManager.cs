@@ -33,6 +33,9 @@ public class LevelManager : MonoBehaviour {
     [SerializeField]
     GameObject levelEnd;
 
+    [SerializeField]
+    SceneElement finalTrigger;
+
     void Awake()
     {
         levelManager = this;
@@ -46,18 +49,20 @@ public class LevelManager : MonoBehaviour {
     void Update()
     {
 		if (goldCharacter.transform.position.x >= levelEnd.transform.position.x && goldCharacter.activeSelf) {
-			if (SceneManager.GetActiveScene ().buildIndex == 2) {
-				//PREPARE END GAME (Script FinalLevelManager)
-			} else
 				StartCoroutine ("WaitForReset");
 		}
 		else if (plantCharacter.transform.position.x >= levelEnd.transform.position.x && plantCharacter.activeSelf)
-			StartCoroutine ("WaitForEnd");
+            if (SceneManager.GetActiveScene().buildIndex == 2)
+            {
+                //PREPARE END GAME (Script FinalLevelManager)
+                StartCoroutine("FinalOfTheGame");
+            }
+            else StartCoroutine("WaitForEnd");
 
-		else if (plantCharacter.transform.position.x >= midCheckpoint.transform.position.x) {
+		/*else if (plantCharacter.transform.position.x >= midCheckpoint.transform.position.x) {
 			currentCheckpoint = midCheckpoint;
 			Camera.main.GetComponent<CameraMovement> ().initPos = midCheckpoint.transform.position;
-		}
+		}*/
 
     }
 
@@ -102,7 +107,7 @@ public class LevelManager : MonoBehaviour {
         plantCharacter.SetActive(true);
         Camera.main.GetComponent<CameraMovement>().ResetCamera();
         goldCharacter.SetActive(false);
-        LevelManager.levelManager.player = plantCharacter;
+        player = plantCharacter;
     }
 
     IEnumerator WaitForEnd()
@@ -110,5 +115,23 @@ public class LevelManager : MonoBehaviour {
         yield return new WaitForSecondsRealtime(1.5f);
         //HAY QUE CONFIGURAR LOS BUILD SETTINGS PARA LAS ESCENAS
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1, LoadSceneMode.Single);
+    }
+
+    IEnumerator FinalOfTheGame()
+    {
+        //player.GetComponent<CharacterMovementFinal>().enabled = false;
+        Camera.main.GetComponentInChildren<AudioSource>().Play();
+        finalTrigger.gameObject.SetActive(true);
+        finalTrigger.TurnIntoGold();
+
+        Instantiate(deathParticle, player.GetComponentInChildren<SpriteRenderer>().bounds.center, player.transform.rotation);
+        player.SetActive(false);
+
+        //Orificar suelo y árboles, crear más partículas
+        yield return new WaitForSeconds(1.2f);
+
+        //fundido en negro
+        //poema
+        //créditos
     }
 }
