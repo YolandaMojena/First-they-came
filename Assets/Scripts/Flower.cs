@@ -79,6 +79,8 @@ public class Flower : MonoBehaviour {
         {
             Growing = false;
             Velocity = Vector3.zero;
+            foreach (Transform t in transform)
+                t.GetComponent<Collider2D>().enabled = false;
         }
         else
         {
