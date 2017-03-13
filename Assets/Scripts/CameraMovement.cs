@@ -49,6 +49,11 @@ public class CameraMovement : MonoBehaviour {
                 player.SetActive(true);
             }               
         }
+
+		if (Input.GetKey(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
     }
 
     // LateUpdate is called after Update each frame
@@ -92,7 +97,6 @@ public class CameraMovement : MonoBehaviour {
     }
 
     public void ResetCamera() {
-
         reset = true;
         player = plantCharacter;
     }
