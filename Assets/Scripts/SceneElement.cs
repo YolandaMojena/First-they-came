@@ -37,7 +37,7 @@ public class SceneElement : MonoBehaviour {
 
     public void TurnIntoGold()
     {
-        if (!Orificated)
+		if (!Orificated)
         {
             Orificated = true;
             gameObject.tag = "Orificated";
@@ -47,7 +47,7 @@ public class SceneElement : MonoBehaviour {
             foreach (GameObject particle in particlesToActivate)
 				particle.SetActive (true);
         }
-    }
+    }	
 
     // Coroutine which turns gradually into gold
     IEnumerator Orificate()
