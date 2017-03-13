@@ -9,12 +9,14 @@ public class Intro : MonoBehaviour {
 	public Image playersImage;
 	public Image titleImage;
 
+	public bool jamTime = false;
+	public bool playersTime = false;
+	public bool blackTime = false;
+	public bool titleTime = false;
+
+	public Image black;
+
 	public float fadeTime = 1.5f; // Must be lees than 3
-
-	private bool jamTime = false;
-	private bool playersTime = false;
-	private bool titleTime = false;
-
 	public GameObject music;
 
 	int i = 1;
@@ -29,9 +31,12 @@ public class Intro : MonoBehaviour {
 	{
 		if (jamTime)
 			Fade ("jam");
-		else if (checkAlpha(jamImage) <= 0.02f && playersTime) {
+		else if (checkAlpha (jamImage) <= 0.02f && playersTime) {
 			Fade ("players");
-		} else if (checkAlpha(playersImage) <= 0.02f && titleTime)
+		} else if (checkAlpha (playersImage) <= 0.02f && blackTime) {
+			Fade ("black");
+		}
+		else if (checkAlpha(black) <= 0.02f && titleTime)
 			Fade ("title");
 	}
 		
@@ -49,9 +54,14 @@ public class Intro : MonoBehaviour {
 			music.GetComponent<AudioSource> ().Play();
 			StartCoroutine ("WaitForContinuing");
 			break;
-		case "title":
-			titleImage.CrossFadeAlpha (0f, fadeTime - 0.5f, false);
+		case "black":
+			blackTime = false;
+			black.CrossFadeAlpha (0f, fadeTime - 1f, false);
 			StartCoroutine ("WaitForContinuing");
+			break;
+		case "title":
+			titleTime = false;
+			titleImage.CrossFadeAlpha (0f, fadeTime - 0.5f, false);
 			break;
 		}
 	}
@@ -64,16 +74,15 @@ public class Intro : MonoBehaviour {
 	public IEnumerator WaitForContinuing(){
 		yield return new WaitForSeconds (3f);
 
-		if (i == 1) {
+		if (i == 1)
+			jamTime = true;
+		else if (i == 2)
 			playersTime = true;
-		} else if (i == 2) {
+		else if (i == 3)
+			blackTime = true;
+		else if (i == 4)
 			titleTime = true;
-		} else if (i == 3) {
-			Destroy (this.gameObject.GetComponent<Intro>());
-		}
-		
 		i += 1;
-
 	}
 		
 	public IEnumerator WaitForStarting(){
