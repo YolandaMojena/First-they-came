@@ -8,13 +8,21 @@ public class AICharacter : MonoBehaviour {
     CharacterMovement chmov;
     [SerializeField]
     SpriteRenderer sprite;
+    public SpriteRenderer GoldSpriteRenderer;
+    public Sprite FlippedGoldSprite;
+    public Sprite DefaultSprite;
+    
 
     // Use this for initialization
     void Start () {
         chmov = GetComponent<CharacterMovement>();
-        sprite = GetComponentInChildren<SpriteRenderer>();
-        if(sprite)
+        if(!sprite)
+            sprite = GetComponentInChildren<SpriteRenderer>();
+        if (sprite)
+        {
             SetRandomColor();
+            DefaultSprite = sprite.sprite;
+        }
 
 	}
 	
@@ -31,7 +39,6 @@ public class AICharacter : MonoBehaviour {
                     chmov.run = 1;
                 else
                     chmov.run = 0;
-
             }
         }
 	}
