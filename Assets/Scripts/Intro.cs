@@ -60,14 +60,15 @@ public class Intro : MonoBehaviour {
 			break;
 		case "tutorial":
 			//tutorialTime = false;
-			tutorialImage.CrossFadeAlpha (0f, fadeTime + 1f, false);
+			tutorialImage.CrossFadeAlpha (0f, fadeTime, false);
+			black.CrossFadeAlpha (0.3f, 4.5f, false);
 			StartCoroutine ("WaitForContinuing");
 			break;
 		case "black":
 			blackTime = false;
-			tutorialImage.CrossFadeAlpha (0f, fadeTime + 1f, false);
+			//tutorialImage.CrossFadeAlpha (0f, fadeTime + 1f, false);
 			music.GetComponent<AudioSource> ().Play();
-			black.CrossFadeAlpha (0f, 0.7f, false);
+			black.CrossFadeAlpha (0f, 1f, false);
 			StartCoroutine ("WaitForContinuing");
 			break;
 		case "title":
