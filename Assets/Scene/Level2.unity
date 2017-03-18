@@ -6651,6 +6651,12 @@ Prefab:
       propertyPath: midCheckpoint
       value: 
       objectReference: {fileID: 448645573}
+    - target: {fileID: 114136350309563822, guid: 2429c7237624c0b489fae64ed5dbc439,
+        type: 2}
+      propertyPath: deathParticle
+      value: 
+      objectReference: {fileID: 1719341272087852, guid: faca5515476fa4356a790568d885198d,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2429c7237624c0b489fae64ed5dbc439, type: 2}
   m_IsPrefabParent: 0
